@@ -11,7 +11,22 @@ class Arbol_genealogico_insertador:
             return True
         elif self.__insertar_descendencia(raiz,persona):
             return True
+        elif self.__insertar_sobrinos_primos(raiz,persona):
+            return True
         return False
+    def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
+        if raiz:
+            if (raiz.padre_id == persona.padre_id and raiz.padre_id != 0) or (raiz.madre_id == persona.madre_id and raiz.madre_id != 0):
+                if persona not in raiz.hermanos:
+                    raiz.hermanos.append(persona)
+                if raiz not in persona.hermanos:
+                    persona.hermanos.append(raiz)
+                    return True
+            elif self.__insertar_hermanos_tios(raiz.padre,persona):
+                return True
+            elif self.__insertar_hermanos_tios(raiz.madre,persona):
+                return True
+            return False
     def __insertar_ascendencia(self,raiz:Nodo_persona,persona:Nodo_persona):
         if raiz:
             if raiz.padre_id==persona.persona_id:
@@ -25,19 +40,6 @@ class Arbol_genealogico_insertador:
             elif self.__insertar_ascendencia(raiz.padre,persona)==True:
                 return True
             elif self.__insertar_ascendencia(raiz.madre,persona)==True:
-                return True
-            return False
-    def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
-        if raiz:
-            if (raiz.padre_id == persona.padre_id and raiz.padre_id != 0) or (raiz.madre_id == persona.madre_id and raiz.madre_id != 0):
-                if persona not in raiz.hermanos:
-                    raiz.hermanos.append(persona)
-                if raiz not in persona.hermanos:
-                    persona.hermanos.append(raiz)
-                    return True
-            elif self.__insertar_hermanos_tios(raiz.padre,persona):
-                return True
-            elif self.__insertar_hermanos_tios(raiz.madre,persona):
                 return True
             return False
     def __insertar_descendencia(self,raiz:Nodo_persona,persona:Nodo_persona):
@@ -55,10 +57,22 @@ class Arbol_genealogico_insertador:
                     if self.__insertar_descendencia(hijo,persona)==True:
                         return True
             return False
+    def __insertar_sobrinos_primos(self,raiz:Nodo_persona,persona:Nodo_persona):
+        if raiz:
+            for hermano in raiz.hermanos:
+                if self.__insertar_descendencia(hermano,persona):
+                    return True
+            if self.__insertar_sobrinos_primos(raiz.padre,persona):
+                return True
+            if self.__insertar_sobrinos_primos(raiz.madre,persona):
+                return True
+        return False
             
 #BISABUELO
 Rodolfo=Nodo_persona(1,0,12,"Rodolfo","Male",80,"Single")
 Lucho=Nodo_persona(23,0,12,"Lucho","Male",70,"Married")
+#Hijo de Lucho
+Esteban=Nodo_persona(45,23,46,"Esteban","Male",65,"Married")
 #ABUELO
 Pablo=Nodo_persona(2,1,11,"Pablo","Male",55,"Single")
 #PADRE
@@ -72,4 +86,5 @@ arbol.insertar_personas_casa(luis,[ernesto,Pablo])
 arbol.insertar_personas_casa(luis,[Rodolfo])
 arbol.insertar_personas_casa(luis,[pedro])
 arbol.insertar_personas_casa(pedro,[Lucho])
+arbol.insertar_personas_casa(pedro,[Esteban])
 pass
