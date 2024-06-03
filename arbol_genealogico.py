@@ -16,9 +16,11 @@ class Arbol_genealogico_insertador:
         if raiz:
             if raiz.padre_id==persona.persona_id:
                 raiz.padre=persona
+                persona.hijos.append(raiz)
                 return True
             elif raiz.madre_id==persona.persona_id:
                 raiz.madre=persona
+                persona.hijos.append(raiz)
                 return True
             elif self.__insertar_ascendencia(raiz.padre,persona)==True:
                 return True
