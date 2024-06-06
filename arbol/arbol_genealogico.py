@@ -1,8 +1,10 @@
 import json
+import consultas as consultas
 from nodos_arbol import Nodo_persona
 
 class Arbol_genealogico_insertador:
     def __init__(self) -> None:
+        self.personaje_id = int
         self.hermanos_tios_ids = []
         self.ascendencia_ids = []
         self.descendencia_ids = []
@@ -12,22 +14,22 @@ class Arbol_genealogico_insertador:
         if self.__insertar_hermanos_tios(raiz,persona):
             if persona.persona_id not in self.hermanos_tios_ids:
                 self.hermanos_tios_ids.append(persona.persona_id)
-                self.guardar_json()
+                self.guardar_json(raiz)
             return True
         elif self.__insertar_ascendencia(raiz,persona):
             if persona.persona_id not in self.ascendencia_ids:
                 self.ascendencia_ids.append(persona.persona_id)
-                self.guardar_json()
+                self.guardar_json(raiz)
             return True
         elif self.__insertar_descendencia(raiz,persona):
             if persona.persona_id not in self.descendencia_ids:
                 self.descendencia_ids.append(persona.persona_id)
-                self.guardar_json()
+                self.guardar_json(raiz)
             return True
         elif self.__insertar_sobrinos_primos(raiz,persona):
             if persona.persona_id not in self.sobrinos_primos_ids:
                 self.sobrinos_primos_ids.append(persona.persona_id)
-                self.guardar_json()
+                self.guardar_json(raiz)
             return True
         return False
     def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
@@ -88,34 +90,76 @@ class Arbol_genealogico_insertador:
                 return True
         return False
     
-    def guardar_json(self):
+    def guardar_json(self, raiz):
         data = {
             "hermanos_tios": self.hermanos_tios_ids,
             "ascendencia": self.ascendencia_ids,
             "descendencia": self.descendencia_ids,
             "sobrinos_primos": self.sobrinos_primos_ids
         }
-        with open("arbol_genealogico.json", "w") as file:
+        with open(f"arbol_genealogico.json", "w") as file:
             json.dump(data, file, indent=4)
+
+    def cargar_json(self):
+        with open("arbol_genealogico.json", "r") as file:
+            data = json.load(file)
+            self.hermanos_tios_ids = data.get("hermanos_tios", [])
+            self.ascendencia_ids = data.get("ascendencia", [])
+            self.descendencia_ids = data.get("descendencia", [])
+            self.sobrinos_primos_ids = data.get("sobrinos_primos", [])
+
+    def cargar_arbol(self, raiz):
+        self.cargar_json()
+        for ascendencia_id in self.ascendencia_ids:
+            info_actual = consultas.Consulta_persona_por_id.consultar_persona(ascendencia_id)
+            ascendencia = Nodo_persona(info_actual["id"],
+                                 info_actual["father"], #id de padre
+                                 info_actual["mother"], #id de madre
+                                 info_actual["name"],
+                                 info_actual["gender"],
+                                 info_actual["age"],
+                                 info_actual["marital_status"])
+            self.insertar_persona(raiz, ascendencia)
+        for descendencia_id in self.descendencia_ids:
+            info_actual = consultas.Consulta_persona_por_id.consultar_persona(descendencia_id)
+            descendencia = Nodo_persona(info_actual["id"],
+                                        info_actual["father"], #id de padre
+                                        info_actual["mother"], #id de madre
+                                        info_actual["name"],
+                                        info_actual["gender"],
+                                        info_actual["age"],
+                                        info_actual["marital_status"])
+            self.insertar_persona(raiz, descendencia)
+        for hermanos_tios_id in self.hermanos_tios_ids:
+            info_actual = consultas.Consulta_persona_por_id.consultar_persona(hermanos_tios_id)
+            hermanos_tios = Nodo_persona(info_actual["id"],
+                                         info_actual["father"], #id de padre
+                                         info_actual["mother"], #id de madre
+                                         info_actual["name"],
+                                         info_actual["gender"],
+                                         info_actual["age"],
+                                         info_actual["marital_status"])
+            self.insertar_persona(raiz, hermanos_tios)
+        for sobrinos_primos_id in self.sobrinos_primos_ids:
+            info_actual = consultas.Consulta_persona_por_id.consultar_persona(sobrinos_primos_id)
+            sobrinos_primos = Nodo_persona(info_actual["id"],
+                                           info_actual["father"], #id de padre
+                                           info_actual["mother"], #id de madre
+                                           info_actual["name"],
+                                           info_actual["gender"],
+                                           info_actual["age"],
+                                           info_actual["marital_status"])
+            self.insertar_persona(raiz, sobrinos_primos)
+            pass
             
-#BISABUELO
-Rodolfo=Nodo_persona(1,0,12,"Rodolfo","Male",80,"Single")
-Lucho=Nodo_persona(23,0,12,"Lucho","Male",70,"Married")
-#Hijo de Lucho
-Esteban=Nodo_persona(45,23,46,"Esteban","Male",65,"Married")
-#ABUELO
-Pablo=Nodo_persona(2,1,11,"Pablo","Male",55,"Single")
-#PADRE
-ernesto=Nodo_persona(3,2,10,"Ernesto","Male",25,"Single")
+            
+            
+
 #PERSONA
-luis=Nodo_persona(4,3,9,"Luis","Male",5,"Single")
+luis=Nodo_persona(126,3,9,"Luis","Male",5,"Single")
 #HIJO
 pedro=Nodo_persona(22,4,89,"Pedro","Male",1,"Married")
 arbol=Arbol_genealogico_insertador()
-arbol.insertar_persona(luis,ernesto)
-arbol.insertar_persona(luis,Pablo)
-arbol.insertar_persona(luis,Rodolfo)
 arbol.insertar_persona(luis,pedro)
-arbol.insertar_persona(pedro,Lucho)
-arbol.insertar_persona(pedro,Esteban)
+arbol.cargar_arbol(luis)
 pass

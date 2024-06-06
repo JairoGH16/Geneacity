@@ -1,5 +1,5 @@
 import pygame
-import consultas
+import arbol.consultas as consultas
 
 class Ventana_seleccion_personajes:
     def __init__(self,screen,mouse_pos):

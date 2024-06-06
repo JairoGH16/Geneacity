@@ -1,6 +1,6 @@
 import pygame
 import time
-import consultas
+import arbol.consultas as consultas
 
 class Cargador_casas:
     def __init__(self):

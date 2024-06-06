@@ -1,4 +1,4 @@
-from arbol.nodos_arbol import Nodo_persona
+from nodos_arbol import Nodo_persona
 import consultas
 """           Creación de nodos del personaje seleccionado y creación de nodos iniciales para el árbol genealógico"""
 #seleccionar_habitante
