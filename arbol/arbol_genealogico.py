@@ -68,8 +68,9 @@ class Arbol_genealogico_insertador:
                     persona.padre=raiz
                 return True
             elif raiz.persona_id==persona.madre_id:
-                raiz.hijos.append(persona)
-                persona.madre=raiz
+                if persona not in raiz.hijos:
+                    raiz.hijos.append(persona)
+                    persona.madre=raiz
                 return True
             elif len(raiz.hijos) > 0:
                 for hijo in raiz.hijos:
