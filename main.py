@@ -3,6 +3,7 @@ import time
 import consultas
 from casas.cargador_casas import Cargador_casas
 from personajes.personaje import Administrador_personajes
+from imagenes.fondo import Fondo
 
 class Game:
     def __init__(self):
@@ -15,7 +16,7 @@ class Game:
         self.moviendose=False
         self.personaje_x=500
         self.personaje_y=300
-        self.fondo=pygame.image.load("imagenes/escenario/esc_cesped.png")
+        self.fondo=Fondo(self.screen)
 
     def run(self):
         self.admin_personajes.actualizar_personaje(115)
@@ -31,16 +32,11 @@ class Game:
                 self.personaje_x -= 15
             if keys_pressed[pygame.K_d] or keys_pressed[pygame.K_RIGHT]:
                 self.personaje_x += 15
-
             self.handle_events()
             self.repeat_actions()
             pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
             self.screen.fill((0,0,0))
-            #Fondo
-            for x in range(0, 800, 32):
-                for y in range(0, 800, 32):
-                    self.screen.blit(self.fondo, (x, y))
-
+            self.fondo.colocar_fondo()
             if self.moviendose:
                 self.admin_personajes.actualizar_indice_personaje()
             self.admin_personajes.dibujar_personaje()
