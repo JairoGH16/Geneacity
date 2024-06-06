@@ -28,7 +28,7 @@ class Administrador_personajes:
             self.img_direccion="arriba"
         if self.edad_personaje<2:
             self.personaje=Bebe(self.screen)
-        if self.edad_personaje >=2 and self.edad_personaje<13:
+        if self.edad_personaje >=2 and self.edad_personaje<12:
             if self.genero=="Male":
                 self.personaje=Niño(self.screen)
             else:

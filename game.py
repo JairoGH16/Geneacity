@@ -18,12 +18,16 @@ class Game:
         self.personaje_x=500
         self.personaje_y=300
         self.fondo=Fondo_cesped(self.screen)
-        self.ventana_seleccion_personajes=Ventana_seleccion_personajes(self.screen)
+        self.ventana_seleccion_personajes=Ventana_seleccion_personajes(self.screen,0)
 
     def juego_principal(self):
         self.admin_personajes.actualizar_personaje(115)
         self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
         while self.running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
             keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
             if keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]:
@@ -49,8 +53,13 @@ class Game:
     def menu_seleccion_personaje(self):
         seleccionando_personaje=True
         while seleccionando_personaje:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+            mouse_pos = pygame.mouse.get_pos()
             pygame.time.delay(100)
             self.screen.fill((0,0,0))
+            self.ventana_seleccion_personajes.mouse_pos=mouse_pos
             self.ventana_seleccion_personajes.dibujar_ventana()
             pygame.display.flip()
 
