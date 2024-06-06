@@ -1,5 +1,6 @@
 import pygame
 import time
+import consultas
 from casas.cargador_casas import Cargador_casas
 from personajes.personaje import Administrador_personajes
 
@@ -61,9 +62,9 @@ class Game:
                     self.clic_en_casa(event.pos)
 
     def clic_en_casa(self, mouse_pos):
-        for rect in self.cargador_casas.casa_rects:
+        for rect,casa_id in self.cargador_casas.casa_rects:
             if rect.collidepoint(mouse_pos):
-                print("HOLA")  # Imprimir HOLA si se clickea sobre una casa
+                print(consultas.Consulta_id_personas_casa.consultar_personas_casa(casa_id))  # Imprimir si se clickea sobre una casa
                 break
 
     def repeat_actions(self):

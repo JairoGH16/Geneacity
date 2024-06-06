@@ -43,4 +43,4 @@ class Cargador_casas:
                 imagen_casa = self.edificio_ciudad
             rect = imagen_casa.get_rect(topleft=(casa_x, casa_y))
             screen.blit(imagen_casa, rect)
-            self.casa_rects.append(rect)  # Guardar rectángulo y datos de la casa
+            self.casa_rects.append((rect,casa["id"]))  # Guardar rectángulo y id de la casa
