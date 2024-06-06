@@ -1,14 +1,29 @@
-from arbol.nodos_arbol import Nodo_persona
+import json
+from nodos_arbol import Nodo_persona
 
 class Arbol_genealogico_insertador:
+    def __init__(self) -> None:
+        self.hermanos_tios_ids = []
+        self.ascendencia_ids = []
+        self.descendencia_ids = []
+        self.sobrinos_primos_ids = []
+
     def insertar_persona(self,raiz,persona):
         if self.__insertar_hermanos_tios(raiz,persona):
+            self.hermanos_tios_ids.append(persona.persona_id)
+            self.guardar_json()
             return True
         elif self.__insertar_ascendencia(raiz,persona):
+            self.ascendencia_ids.append(persona.persona_id)
+            self.guardar_json()
             return True
         elif self.__insertar_descendencia(raiz,persona):
+            self.descendencia_ids.append(persona.persona_id)
+            self.guardar_json()
             return True
         elif self.__insertar_sobrinos_primos(raiz,persona):
+            self.sobrinos_primos_ids.append(persona.persona_id)
+            self.guardar_json()
             return True
         return False
     def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
@@ -67,6 +82,16 @@ class Arbol_genealogico_insertador:
             if self.__insertar_sobrinos_primos(raiz.madre,persona):
                 return True
         return False
+    
+    def guardar_json(self):
+        data = {
+            "hermanos_tios": self.hermanos_tios_ids,
+            "ascendencia": self.ascendencia_ids,
+            "descendencia": self.descendencia_ids,
+            "sobrinos_primos": self.sobrinos_primos_ids
+        }
+        with open("arbol_genealogico.json", "w") as file:
+            json.dump(data, file, indent=4)
             
 #BISABUELO
 Rodolfo=Nodo_persona(1,0,12,"Rodolfo","Male",80,"Single")
