@@ -15,9 +15,11 @@ class Game:
         self.moviendose=False
         self.personaje_x=500
         self.personaje_y=300
+        self.fondo=pygame.image.load("imagenes/escenario/esc_cesped.png")
 
     def run(self):
         self.admin_personajes.actualizar_personaje(115)
+        self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
         while self.running:
 
             keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
@@ -34,6 +36,11 @@ class Game:
             self.repeat_actions()
             pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
             self.screen.fill((0,0,0))
+            #Fondo
+            for x in range(0, 800, 32):
+                for y in range(0, 800, 32):
+                    self.screen.blit(self.fondo, (x, y))
+
             if self.moviendose:
                 self.admin_personajes.actualizar_indice_personaje()
             self.admin_personajes.dibujar_personaje()
