@@ -21,6 +21,7 @@ class Cargador_casas:
 
     def cargar_casas(self):
         self.lista_casas=(consultas.Consulta_casas_cercanas.consultar_casas(300, 300))
+        print(self.lista_casas)
 
     def dibujar_casas(self,screen):
         """
