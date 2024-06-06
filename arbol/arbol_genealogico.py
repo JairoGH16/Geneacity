@@ -10,20 +10,24 @@ class Arbol_genealogico_insertador:
 
     def insertar_persona(self,raiz,persona):
         if self.__insertar_hermanos_tios(raiz,persona):
-            self.hermanos_tios_ids.append(persona.persona_id)
-            self.guardar_json()
+            if persona.persona_id not in self.hermanos_tios_ids:
+                self.hermanos_tios_ids.append(persona.persona_id)
+                self.guardar_json()
             return True
         elif self.__insertar_ascendencia(raiz,persona):
-            self.ascendencia_ids.append(persona.persona_id)
-            self.guardar_json()
+            if persona.persona_id not in self.ascendencia_ids:
+                self.ascendencia_ids.append(persona.persona_id)
+                self.guardar_json()
             return True
         elif self.__insertar_descendencia(raiz,persona):
-            self.descendencia_ids.append(persona.persona_id)
-            self.guardar_json()
+            if persona.persona_id not in self.descendencia_ids:
+                self.descendencia_ids.append(persona.persona_id)
+                self.guardar_json()
             return True
         elif self.__insertar_sobrinos_primos(raiz,persona):
-            self.sobrinos_primos_ids.append(persona.persona_id)
-            self.guardar_json()
+            if persona.persona_id not in self.sobrinos_primos_ids:
+                self.sobrinos_primos_ids.append(persona.persona_id)
+                self.guardar_json()
             return True
         return False
     def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
@@ -112,6 +116,5 @@ arbol.insertar_persona(luis,Pablo)
 arbol.insertar_persona(luis,Rodolfo)
 arbol.insertar_persona(luis,pedro)
 arbol.insertar_persona(pedro,Lucho)
-arbol.insertar_persona(pedro,Esteban)
 arbol.insertar_persona(pedro,Esteban)
 pass
