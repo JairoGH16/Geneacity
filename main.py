@@ -12,7 +12,7 @@ class Game:
         self.cargador_casas = Cargador_casas()
         self.admin_personajes=Administrador_personajes(self.screen,17,"Male") #ESTO HAY QUE CONSULTARLO
         self.moviendose=False
-        self.personaje_x=300
+        self.personaje_x=500
         self.personaje_y=300
 
     def run(self):
@@ -55,6 +55,16 @@ class Game:
                     self.moviendose=False
                 if event.key in self.last_action_time:
                     self.cargador_casas.tecla_alzada(event.key,self.last_action_time)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Verificar si el botón es el izquierdo
+                if event.button == 1:  # 1 es el botón izquierdo del mouse
+                    self.clic_en_casa(event.pos)
+
+    def clic_en_casa(self, mouse_pos):
+        for rect in self.cargador_casas.casa_rects:
+            if rect.collidepoint(mouse_pos):
+                print("HOLA")  # Imprimir HOLA si se clickea sobre una casa
+                break
 
     def repeat_actions(self):
         current_time = time.time()
