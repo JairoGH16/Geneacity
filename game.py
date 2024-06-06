@@ -3,7 +3,8 @@ import time
 import consultas
 from casas.cargador_casas import Cargador_casas
 from personajes.personaje import Administrador_personajes
-from imagenes.fondo import Fondo
+from imagenes.fondo import Fondo_cesped
+from personajes.seleccion_personaje import Ventana_seleccion_personajes
 
 class Game:
     def __init__(self):
@@ -16,9 +17,10 @@ class Game:
         self.moviendose=False
         self.personaje_x=500
         self.personaje_y=300
-        self.fondo=Fondo(self.screen)
+        self.fondo=Fondo_cesped(self.screen)
+        self.ventana_seleccion_personajes=Ventana_seleccion_personajes(self.screen)
 
-    def run(self):
+    def juego_principal(self):
         self.admin_personajes.actualizar_personaje(115)
         self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
         while self.running:
@@ -32,7 +34,7 @@ class Game:
                 self.personaje_x -= 15
             if keys_pressed[pygame.K_d] or keys_pressed[pygame.K_RIGHT]:
                 self.personaje_x += 15
-            self.handle_events()
+            self.manejo_eventos()
             self.repeat_actions()
             pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
             self.screen.fill((0,0,0))
@@ -44,7 +46,15 @@ class Game:
             pygame.display.flip()  # Actualizar la pantalla
         pygame.quit()
 
-    def handle_events(self):
+    def menu_seleccion_personaje(self):
+        seleccionando_personaje=True
+        while seleccionando_personaje:
+            pygame.time.delay(100)
+            self.screen.fill((0,0,0))
+            self.ventana_seleccion_personajes.dibujar_ventana()
+            pygame.display.flip()
+
+    def manejo_eventos(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -80,4 +90,4 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
-    game.run()
+    game.menu_seleccion_personaje()
