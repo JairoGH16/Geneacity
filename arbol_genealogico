@@ -1,0 +1,36 @@
+digraph {
+	4 [label="Luis
+5 años"]
+	3 -> 4 [label=padre]
+	3 [label="Ernesto
+25 años"]
+	2 -> 3 [label=padre]
+	2 [label="Pablo
+55 años"]
+	1 -> 2 [label=padre]
+	1 [label="Rodolfo
+80 años"]
+	1 -> 23 [label=hermano]
+	23 [label="Lucho
+70 años"]
+	23 -> 1 [label=hermano]
+	23 -> 45 [label=hijo]
+	45 [label="Esteban
+65 años"]
+	23 -> 45 [label=padre]
+	1 -> 2 [label=hijo]
+	2 -> 3 [label=hijo]
+	3 -> 4 [label=hijo]
+	4 -> 13 [label=hermano]
+	13 [label="hermano
+15 años"]
+	13 -> 4 [label=hermano]
+	4 -> 22 [label=hijo]
+	22 [label="Pedro
+1 años"]
+	4 -> 22 [label=padre]
+	4 -> 18 [label=hijo]
+	18 [label="Luisin
+2 años"]
+	4 -> 18 [label=padre]
+}

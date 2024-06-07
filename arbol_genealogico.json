@@ -1,10 +1,16 @@
 {
-    "hermanos_tios": [],
+    "hermanos_tios": [
+        23
+    ],
     "ascendencia": [
         3,
         2,
         1
     ],
-    "descendencia": [],
-    "sobrinos_primos": []
+    "descendencia": [
+        22
+    ],
+    "sobrinos_primos": [
+        45
+    ]
 }

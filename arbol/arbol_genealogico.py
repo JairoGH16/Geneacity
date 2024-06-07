@@ -1,6 +1,10 @@
 import json
 import consultas as consultas
 from nodos_arbol import Nodo_persona
+import pydot
+import networkx as nx
+import matplotlib.pyplot as plt
+from networkx.drawing.nx_pydot import graphviz_layout
 
 class Arbol_genealogico_insertador:
     def __init__(self) -> None:
@@ -151,15 +155,60 @@ class Arbol_genealogico_insertador:
                                            info_actual["marital_status"])
             self.insertar_persona(raiz, sobrinos_primos)
             pass
-            
-            
-            
 
-#PERSONA
-luis=Nodo_persona(126,3,9,"Luis","Male",5,"Single")
-#HIJO
-pedro=Nodo_persona(22,4,89,"Pedro","Male",1,"Married")
-arbol=Arbol_genealogico_insertador()
-arbol.insertar_persona(luis,pedro)
-arbol.cargar_arbol(luis)
-pass
+def construir_arbol(personas):
+    personas_dict = {p.persona_id: p for p in personas}
+    
+    for persona in personas:
+        if persona.padre_id in personas_dict:
+            persona.padre = personas_dict[persona.padre_id]
+            personas_dict[persona.padre_id].hijos.append(persona)
+        if persona.madre_id in personas_dict:
+            persona.madre = personas_dict[persona.madre_id]
+            personas_dict[persona.madre_id].hijos.append(persona)
+    
+    return personas_dict
+
+def crear_grafico_arbol(personas_dict):
+    g = nx.DiGraph()
+    
+    for persona_id, persona in personas_dict.items():
+        label = f"{persona.nombre}\n{persona.edad} años"
+        g.add_node(persona_id, label=label)
+        
+        if persona.padre:
+            g.add_edge(persona.padre.persona_id, persona_id)
+        if persona.madre:
+            g.add_edge(persona.madre.persona_id, persona_id)
+    
+    return g
+
+# Creación del árbol genealógico según tu ejemplo
+Rodolfo = Nodo_persona(1, 0, 12, "Rodolfo", "Male", 80, "Single")
+Lucho = Nodo_persona(23, 0, 12, "Lucho", "Male", 70, "Married")
+Esteban = Nodo_persona(45, 23, 46, "Esteban", "Male", 65, "Married")
+Pablo = Nodo_persona(2, 1, 11, "Pablo", "Male", 55, "Single")
+ernesto = Nodo_persona(3, 2, 10, "Ernesto", "Male", 25, "Single")
+luis = Nodo_persona(4, 3, 9, "Luis", "Male", 5, "Single")
+pedro = Nodo_persona(22, 4, 89, "Pedro", "Male", 1, "Married")
+luish = Nodo_persona(13, 3, 9, "Hermano", "Male", 15, "Single")
+luish2 = Nodo_persona(15, 3, 9, "Hermano2", "Male", 15, "Single")
+luish3 = Nodo_persona(16, 3, 9, "Hermano3", "Male", 15, "Single")
+
+# Lista de todas las personas
+personas = [Rodolfo, Lucho, Esteban, Pablo, ernesto, luis, pedro, luish, luish2, luish3]
+
+# Construcción del árbol genealógico
+personas_dict = construir_arbol(personas)
+
+# Creación del gráfico del árbol genealógico
+grafico_arbol = crear_grafico_arbol(personas_dict)
+
+# Visualización del gráfico
+pos = graphviz_layout(grafico_arbol, prog="dot")
+labels = nx.get_node_attributes(grafico_arbol, 'label')
+
+plt.figure(figsize=(12, 8))
+nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=3000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
+plt.title("Árbol Genealógico")
+plt.show()
