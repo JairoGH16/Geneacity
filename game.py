@@ -3,8 +3,8 @@ import time
 import consultas
 from casas.cargador_casas import Cargador_casas
 from personajes.personaje import Administrador_personajes
-from imagenes.fondo import Fondo_cesped
-from personajes.seleccion_personaje import Ventana_seleccion_personajes
+from imagenes.fondo import Fondo
+from personajes.control_menu_personaje import Controlador_menu_personaje
 
 class Game:
     def __init__(self):
@@ -13,22 +13,20 @@ class Game:
         self.running = True
         self.last_action_time = {}
         self.cargador_casas = Cargador_casas()
-        self.admin_personajes=Administrador_personajes(self.screen,17,"Male") #ESTO HAY QUE CONSULTARLO
         self.moviendose=False
-        self.personaje_x=500
-        self.personaje_y=300
-        self.fondo=Fondo_cesped(self.screen)
-        self.ventana_seleccion_personajes=Ventana_seleccion_personajes(self.screen,0)
+        self.fondo_cesped=pygame.image.load("imagenes/escenario/esc_cesped.png")
 
     def juego_principal(self):
+        self.personaje_x:int=0
+        self.personaje_y:int=0
+        
+        self.controlador_menu_personaje=Controlador_menu_personaje(self.screen,self.personaje_x,self.personaje_y)
+        personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
+        self.admin_personajes:Administrador_personajes=Administrador_personajes(self.screen,personaje["age"],personaje["gender"])
+
         self.admin_personajes.actualizar_personaje(115)
         self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
         while self.running:
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-
             keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
             if keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]:
                 self.personaje_y -= 15
@@ -42,26 +40,13 @@ class Game:
             self.repeat_actions()
             pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
             self.screen.fill((0,0,0))
-            self.fondo.colocar_fondo()
+            Fondo.colocar_fondo(self.fondo_cesped,self.screen)
             if self.moviendose:
                 self.admin_personajes.actualizar_indice_personaje()
             self.admin_personajes.dibujar_personaje()
             self.cargador_casas.dibujar_casas(self.screen,self.personaje_x,self.personaje_y)
             pygame.display.flip()  # Actualizar la pantalla
         pygame.quit()
-
-    def menu_seleccion_personaje(self):
-        seleccionando_personaje=True
-        while seleccionando_personaje:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-            mouse_pos = pygame.mouse.get_pos()
-            pygame.time.delay(100)
-            self.screen.fill((0,0,0))
-            self.ventana_seleccion_personajes.mouse_pos=mouse_pos
-            self.ventana_seleccion_personajes.dibujar_ventana()
-            pygame.display.flip()
 
     def manejo_eventos(self):
         for event in pygame.event.get():
@@ -99,4 +84,4 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
-    game.menu_seleccion_personaje()
+    game.juego_principal()

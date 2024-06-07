@@ -7,7 +7,7 @@ class Administrador_personajes:
         self.screen=screen
         self.img_direccion:str="derecha_abajo" #Es la dirección de la imagen, no del movimiento
         self.personaje:Personaje=Personaje(screen)
-        self.edad_personaje=edad
+        self.edad_personaje=int(edad)
         self.genero=genero
         self.indice_animacion=0
 
