@@ -6,7 +6,7 @@ class Controlador_menu_personaje:
     def __init__(self,screen,personaje_x:int,personaje_y:int):
         self.screen=screen
         self.enlistador=Enlistador_seleccionador_personajes()
-        self.enlistador.carga_inicial()
+        self.enlistador.consultar_enlistamiento()
         self.dibujador_disponibles=Dibujador_personajes_disponibles(self.enlistador,self.screen)
         self.dibujador_seleccionando=Dibujador_personaje_seleccionando(self.enlistador,self.screen)
         self.personaje_x:int=personaje_x
@@ -16,14 +16,6 @@ class Controlador_menu_personaje:
     def menu_seleccion_personaje(self):
         self.seleccionando_personaje=True
         while self.seleccionando_personaje:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                        print("Tecla Derecha o D fue presionada una vez.")
-                    elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                        print("Tecla Izquierda o A fue presionada una vez.")
             self.mouse_pos = pygame.mouse.get_pos()
             pygame.time.delay(100)
             self.screen.fill((0,0,0))
@@ -34,7 +26,14 @@ class Controlador_menu_personaje:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.seleccionando_personaje = False
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.enlistador.consultar_enlistamiento()
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                        self.enlistador.avanzar_pagina()
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                        self.enlistador.retroceder_pagina()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                 # Verificar si el botón es el izquierdo
                     if event.button == 1:  # 1 es el botón izquierdo del mouse

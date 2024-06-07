@@ -22,6 +22,7 @@ class Game:
         
         self.controlador_menu_personaje=Controlador_menu_personaje(self.screen,self.personaje_x,self.personaje_y)
         personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
+        print(personaje)
         self.admin_personajes:Administrador_personajes=Administrador_personajes(self.screen,personaje["age"],personaje["gender"])
 
         self.admin_personajes.actualizar_personaje(115)
