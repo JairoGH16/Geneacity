@@ -38,7 +38,9 @@ class Controlador_menu_personaje:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                 # Verificar si el botón es el izquierdo
                     if event.button == 1:  # 1 es el botón izquierdo del mouse
-                        return self.seleccionar_personaje()
+                        tupla_seleccion = self.seleccionar_personaje()
+                        if tupla_seleccion[0] == True:
+                            return tupla_seleccion[1]
 
     def seleccionar_personaje(self):
         lista_personajes=self.enlistador.lista_habitantes_impresos
@@ -74,4 +76,5 @@ class Controlador_menu_personaje:
                 indice=11
         if len(lista_personajes)-1>=indice:
             self.seleccionando_personaje=False
-            return(lista_personajes[indice])
+            return(True,(lista_personajes[indice]))
+        return (False,None)
