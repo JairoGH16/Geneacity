@@ -5,6 +5,7 @@ from casas.cargador_casas import Cargador_casas
 from personajes.personaje import Administrador_personajes
 from imagenes.fondo import Fondo
 from personajes.control_menu_personaje import Controlador_menu_personaje
+from interfaz_en_juego.interfaz_durante_juego import Interfaz_durante_juego
 
 class Game:
     def __init__(self):
@@ -15,28 +16,33 @@ class Game:
         self.cargador_casas = Cargador_casas()
         self.moviendose=False
         self.fondo_cesped=pygame.image.load("imagenes/escenario/esc_cesped.png")
+        self.interfaz_durante_juego=Interfaz_durante_juego(self.screen)
 
     def juego_principal(self):
-        self.personaje_x:int=0
-        self.personaje_y:int=0
+        self.personaje_x:int=9985
+        self.personaje_y:int=9985
         
         self.controlador_menu_personaje=Controlador_menu_personaje(self.screen,self.personaje_x,self.personaje_y)
-        personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
-        print(personaje)
-        self.admin_personajes:Administrador_personajes=Administrador_personajes(self.screen,personaje["age"],personaje["gender"])
+        self.personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
+        print(self.personaje)
+        self.admin_personajes:Administrador_personajes=Administrador_personajes(self.screen,self.personaje["age"],self.personaje["gender"])
 
         self.admin_personajes.actualizar_personaje(115)
         self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
         while self.running:
             keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
             if keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]:
-                self.personaje_y -= 15
+                if self.personaje_y > 0:
+                    self.personaje_y -= 15
             if keys_pressed[pygame.K_s] or keys_pressed[pygame.K_DOWN]:
-                self.personaje_y += 15
+                if self.personaje_y < 10000:
+                    self.personaje_y += 15
             if keys_pressed[pygame.K_a] or keys_pressed[pygame.K_LEFT]:
-                self.personaje_x -= 15
+                if self.personaje_x > 0:
+                    self.personaje_x -= 15
             if keys_pressed[pygame.K_d] or keys_pressed[pygame.K_RIGHT]:
-                self.personaje_x += 15
+                if self.personaje_x < 10000:
+                    self.personaje_x += 15
             self.manejo_eventos()
             self.repeat_actions()
             pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
@@ -44,8 +50,9 @@ class Game:
             Fondo.colocar_fondo(self.fondo_cesped,self.screen)
             if self.moviendose:
                 self.admin_personajes.actualizar_indice_personaje()
-            self.admin_personajes.dibujar_personaje()
             self.cargador_casas.dibujar_casas(self.screen,self.personaje_x,self.personaje_y)
+            self.admin_personajes.dibujar_personaje()
+            self.interfaz_durante_juego.dibujar_interfaz_juego(self.personaje,self.personaje_x,self.personaje_y)
             pygame.display.flip()  # Actualizar la pantalla
         pygame.quit()
 

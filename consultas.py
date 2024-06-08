@@ -74,16 +74,16 @@ class Consulta_persona_por_id:
 class Consulta_habitantes_disponibles:
     """Listado descriptivo de habitantes disponibles.
     """
-    def consultar_habitantes() -> list:
+    def consultar_habitantes(x,y) -> list:
         """Retorna el listado descriptivo de las personas que habitan en el juego limitando el resultado a habitantes en un área de 10.000x10.000 píxeles.
 
         Returns:
             list: lista con información de los habitantes, cada habitante es un diccionario dentro de la lista y contiene su id, nombre, género y edad.
         """
-        consulta=Consulta_API_geneacity(f"https://geneacity.life/API/getAvailableInhabitants/?x=5000&y=5000")
+        consulta=Consulta_API_geneacity(f"https://geneacity.life/API/getAvailableInhabitants/?x={x}&y={y}")
         consulta=consulta.json
         return consulta["inhabitants"]
-    
+
 class Seleccionar_habitante: #NO UTILIZAR DE MOMENTO!!!!! no se deben gastar habitantes
     """Selecciona un habitante para iniciar la partida.
     """

@@ -7,8 +7,8 @@ class Controlador_menu_personaje:
         self.screen=screen
         self.enlistador=Enlistador_seleccionador_personajes()
         self.enlistador.consultar_enlistamiento()
-        self.dibujador_disponibles=Dibujador_personajes_disponibles(self.enlistador,self.screen)
-        self.dibujador_seleccionando=Dibujador_personaje_seleccionando(self.enlistador,self.screen)
+        self.dibujador_disponibles=Dibujador_personajes_disponibles(self.screen,self.enlistador)
+        self.dibujador_seleccionando=Dibujador_personaje_seleccionando(self.screen,self.enlistador)
         self.personaje_x:int=personaje_x
         self.personaje_y:int=personaje_y
         self.imagen_menu=pygame.image.load("imagenes/interfaz/gui_seleccion_personaje.png")
