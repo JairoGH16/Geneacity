@@ -19,8 +19,8 @@ class Game:
         self.interfaz_durante_juego=Interfaz_durante_juego(self.screen)
 
     def juego_principal(self):
-        self.personaje_x:int=9985
-        self.personaje_y:int=9985
+        self.personaje_x:int=15
+        self.personaje_y:int=15
         
         self.controlador_menu_personaje=Controlador_menu_personaje(self.screen,self.personaje_x,self.personaje_y)
         self.personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
@@ -35,13 +35,13 @@ class Game:
                 if self.personaje_y > 0:
                     self.personaje_y -= 15
             if keys_pressed[pygame.K_s] or keys_pressed[pygame.K_DOWN]:
-                if self.personaje_y < 10000:
+                if self.personaje_y < 100000:
                     self.personaje_y += 15
             if keys_pressed[pygame.K_a] or keys_pressed[pygame.K_LEFT]:
                 if self.personaje_x > 0:
                     self.personaje_x -= 15
             if keys_pressed[pygame.K_d] or keys_pressed[pygame.K_RIGHT]:
-                if self.personaje_x < 10000:
+                if self.personaje_x < 100000:
                     self.personaje_x += 15
             self.manejo_eventos()
             self.repeat_actions()

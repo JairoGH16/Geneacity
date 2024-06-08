@@ -10,7 +10,16 @@ class Enlistador_seleccionador_personajes:
     def consultar_enlistamiento(self):
         self.primer_habitante_impreso:int=0
         self.ultimo_habitante_impreso:int=12 #para que llegue a 11
-        self.lista_habitantes_disponibles:list=consultas.Consulta_habitantes_disponibles.consultar_habitantes(100000,100000)
+
+        self.lista_habitantes_disponibles:list=[]
+        x = 5000
+        while x <= 95000:
+            try:
+                self.lista_habitantes_disponibles.extend(consultas.Consulta_habitantes_disponibles.consultar_habitantes(x))
+            except:
+                pass
+            x += 10000
+
         self._cargar_enlistamiento()
 
     def avanzar_pagina(self):

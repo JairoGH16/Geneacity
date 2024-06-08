@@ -70,17 +70,17 @@ class Consulta_persona_por_id:
         consulta=Consulta_API_geneacity(f"https://geneacity.life/API/getInhabitantInformation/?id={id_persona}")
         consulta=consulta.json
         return consulta["inhabitant"]
-    
+
 class Consulta_habitantes_disponibles:
     """Listado descriptivo de habitantes disponibles.
     """
-    def consultar_habitantes(x,y) -> list:
+    def consultar_habitantes(x) -> list:
         """Retorna el listado descriptivo de las personas que habitan en el juego limitando el resultado a habitantes en un área de 10.000x10.000 píxeles.
 
         Returns:
             list: lista con información de los habitantes, cada habitante es un diccionario dentro de la lista y contiene su id, nombre, género y edad.
         """
-        consulta=Consulta_API_geneacity(f"https://geneacity.life/API/getAvailableInhabitants/?x={x}&y={y}")
+        consulta=Consulta_API_geneacity(f"https://geneacity.life/API/getAvailableInhabitants/?x={x}&y=0")
         consulta=consulta.json
         return consulta["inhabitants"]
 
@@ -96,7 +96,7 @@ class Seleccionar_habitante: #NO UTILIZAR DE MOMENTO!!!!! no se deben gastar hab
         consulta=Consulta_API_geneacity(f"https://geneacity.life/API/selectAvailableInhabitant/?id={id_habitante}")
         consulta=consulta.json
         return consulta
-    
+
 class Casar_habitantes: #NO UTILIZAR DE MOMENTO!!!!! no se deben gastar habitantes
     """Une dos habitantes de género opuesto en matrimonio, crea una nueva casa para ellos en la posición dada.
     """

@@ -24,5 +24,5 @@ class Interfaz_durante_juego:
         else:
             self.escritor.escribir(285,35,f"{personaje["age"]}",45,(255, 255, 255))
         
-        if personaje_x == 0 or personaje_x == 10000 or personaje_y == 0 or personaje_y == 10000:
+        if personaje_x == 0 or personaje_x >= 100000 or personaje_y == 0 or personaje_y >= 100000:
             self.screen.blit(self.texto_limite, (290, 275))
