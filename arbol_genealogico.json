@@ -1,15 +1,9 @@
 {
     "hermanos_tios": [
-        13,
-        15,
-        16
+        "4",
+        "5"
     ],
-    "ascendencia": [
-        4,
-        3,
-        2,
-        1
-    ],
+    "ascendencia": [],
     "descendencia": [],
     "sobrinos_primos": []
 }

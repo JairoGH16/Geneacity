@@ -1,6 +1,6 @@
 import json
 # import consultas as consultas
-from nodos_arbol import Nodo_persona
+from arbol.nodos_arbol import Nodo_persona
 import pydot
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -20,22 +20,26 @@ class Arbol_genealogico_insertador:
             if persona.persona_id not in self.hermanos_tios_ids:
                 self.hermanos_tios_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
+                return True
+            return False
         elif self.__insertar_ascendencia(raiz,persona):
             if persona.persona_id not in self.ascendencia_ids:
                 self.ascendencia_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
+                return True
+            return False
         elif self.__insertar_descendencia(raiz,persona):
             if persona.persona_id not in self.descendencia_ids:
                 self.descendencia_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
+                return True
+            return False
         elif self.__insertar_sobrinos_primos(raiz,persona):
             if persona.persona_id not in self.sobrinos_primos_ids:
                 self.sobrinos_primos_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
+                return True
+            return False
         return False
     
     def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
@@ -46,6 +50,7 @@ class Arbol_genealogico_insertador:
                 if raiz not in persona.hermanos:
                     persona.hermanos.append(raiz)
                     return True
+                return False
             elif self.__insertar_hermanos_tios(raiz.padre,persona):
                 return True
             elif self.__insertar_hermanos_tios(raiz.madre,persona):
@@ -57,12 +62,14 @@ class Arbol_genealogico_insertador:
                 if raiz not in persona.hijos:
                     raiz.padre=persona
                     persona.hijos.append(raiz)
-                return True
+                    return True
+                return False
             elif raiz.madre_id==persona.persona_id:
                 if raiz not in persona.hijos:
                     raiz.madre=persona
                     persona.hijos.append(raiz)
-                return True
+                    return True
+                return False
             elif self.__insertar_ascendencia(raiz.padre,persona)==True:
                 return True
             elif self.__insertar_ascendencia(raiz.madre,persona)==True:
@@ -74,12 +81,14 @@ class Arbol_genealogico_insertador:
                 if persona not in raiz.hijos:
                     raiz.hijos.append(persona)
                     persona.padre=raiz
-                return True
+                    return True
+                return False
             elif raiz.persona_id==persona.madre_id:
                 if persona not in raiz.hijos:
                     raiz.hijos.append(persona)
                     persona.madre=raiz
-                return True
+                    return True
+                return False
             elif len(raiz.hijos) > 0:
                 for hijo in raiz.hijos:
                     if self.__insertar_descendencia(hijo,persona)==True:
@@ -157,7 +166,7 @@ class Arbol_genealogico_insertador:
     #                                        info_actual["marital_status"])
     #         self.insertar_persona(raiz, sobrinos_primos)
     #         pass
-
+""""
 def construir_arbol(personas):
     personas_dict = {p.persona_id: p for p in personas}
     
@@ -226,3 +235,4 @@ plt.figure(figsize=(12, 8))
 nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=3000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
 plt.title("Árbol Genealógico")
 plt.show()
+"""
