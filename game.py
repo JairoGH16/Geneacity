@@ -9,6 +9,8 @@ from interfaz_en_juego.interfaz_durante_juego import Interfaz_durante_juego
 from casas.control_menu_casas import Controlador_menu_casas
 from interfaz_en_juego.interfaz_muerte import Interfaz_durante_muerte
 from interfaz_en_juego.menu_principal import Menu_principal
+from arbol.nodos_arbol import Nodo_persona
+from arbol.inicializador_arbol import Inicializador_arbol
 
 class Game:
     def __init__(self):
@@ -24,6 +26,7 @@ class Game:
         self.controlador_menu_casas=Controlador_menu_casas(self.screen)
         self.muerte=Interfaz_durante_muerte(self.screen)
         self.menu_principal=Menu_principal(self.screen)
+        self.inicializador_arbol:Inicializador_arbol=Inicializador_arbol()
 
     def juego_principal(self):
         while self.running:
@@ -35,6 +38,7 @@ class Game:
             self.personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
             self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"]
             print(self.personaje)
+            self.nodo_raiz_arbol:Nodo_persona=self.inicializador_arbol.inicializar_arbol(int(self.personaje["id"]))
             self.admin_personajes:Administrador_personajes=Administrador_personajes(self.screen,self.personaje["age"],self.personaje["gender"])
 
             self.admin_personajes.actualizar_personaje(115)
