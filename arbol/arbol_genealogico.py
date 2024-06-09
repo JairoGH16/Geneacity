@@ -14,87 +14,105 @@ class Arbol_genealogico_insertador:
         self.descendencia_ids = []
         self.sobrinos_primos_ids = []
 
-    def insertar_persona(self,raiz,persona):
-
-        if self.__insertar_hermanos_tios(raiz,persona):
+    def insertar_persona(self, raiz, persona):
+        grado = self.__insertar_hermanos_tios(raiz, persona, 0)
+        if grado is not None:
             if persona.persona_id not in self.hermanos_tios_ids:
                 self.hermanos_tios_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
-        elif self.__insertar_ascendencia(raiz,persona):
+            return grado
+
+        grado = self.__insertar_ascendencia(raiz, persona, 0)
+        if grado is not None:
             if persona.persona_id not in self.ascendencia_ids:
                 self.ascendencia_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
-        elif self.__insertar_descendencia(raiz,persona):
+            return grado
+
+        grado = self.__insertar_descendencia(raiz, persona, 0)
+        if grado is not None:
             if persona.persona_id not in self.descendencia_ids:
                 self.descendencia_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
-        elif self.__insertar_sobrinos_primos(raiz,persona):
+            return grado
+
+        grado = self.__insertar_sobrinos_primos(raiz, persona, 0)
+        if grado is not None:
             if persona.persona_id not in self.sobrinos_primos_ids:
                 self.sobrinos_primos_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
-            return True
-        return False
+            return grado
+
+        return None
     
-    def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
+    def __insertar_hermanos_tios(self, raiz: Nodo_persona, persona: Nodo_persona, grado: int):
         if raiz:
             if (raiz.padre_id == persona.padre_id and raiz.padre_id != 0) or (raiz.madre_id == persona.madre_id and raiz.madre_id != 0):
                 if persona not in raiz.hermanos:
                     raiz.hermanos.append(persona)
                 if raiz not in persona.hermanos:
                     persona.hermanos.append(raiz)
-                    return True
-            elif self.__insertar_hermanos_tios(raiz.padre,persona):
-                return True
-            elif self.__insertar_hermanos_tios(raiz.madre,persona):
-                return True
-            return False
-    def __insertar_ascendencia(self,raiz:Nodo_persona,persona:Nodo_persona):
+                grado += 2
+                return grado  # Encontrado al mismo nivel
+            grado_padre = self.__insertar_hermanos_tios(raiz.padre, persona, grado + 1)
+            if grado_padre is not None:
+                return grado_padre
+            grado_madre = self.__insertar_hermanos_tios(raiz.madre, persona, grado + 1)
+            if grado_madre is not None:
+                return grado_madre
+        return None
+    
+    def __insertar_ascendencia(self, raiz: Nodo_persona, persona: Nodo_persona, grado: int):
         if raiz:
-            if raiz.padre_id==persona.persona_id:
+            if raiz.padre_id == persona.persona_id:
                 if raiz not in persona.hijos:
-                    raiz.padre=persona
+                    raiz.padre = persona
                     persona.hijos.append(raiz)
-                return True
-            elif raiz.madre_id==persona.persona_id:
+                return grado + 1
+            elif raiz.madre_id == persona.persona_id:
                 if raiz not in persona.hijos:
-                    raiz.madre=persona
+                    raiz.madre = persona
                     persona.hijos.append(raiz)
-                return True
-            elif self.__insertar_ascendencia(raiz.padre,persona)==True:
-                return True
-            elif self.__insertar_ascendencia(raiz.madre,persona)==True:
-                return True
-            return False
-    def __insertar_descendencia(self,raiz:Nodo_persona,persona:Nodo_persona):
+                return grado + 1
+            grado_padre = self.__insertar_ascendencia(raiz.padre, persona, grado + 1)
+            if grado_padre is not None:
+                return grado_padre
+            grado_madre = self.__insertar_ascendencia(raiz.madre, persona, grado + 1)
+            if grado_madre is not None:
+                return grado_madre
+        return None
+    
+    def __insertar_descendencia(self, raiz: Nodo_persona, persona: Nodo_persona, grado: int):
         if raiz:
-            if raiz.persona_id==persona.padre_id:
+            if raiz.persona_id == persona.padre_id:
                 if persona not in raiz.hijos:
                     raiz.hijos.append(persona)
-                    persona.padre=raiz
-                return True
-            elif raiz.persona_id==persona.madre_id:
+                    persona.padre = raiz
+                return grado + 1
+            elif raiz.persona_id == persona.madre_id:
                 if persona not in raiz.hijos:
                     raiz.hijos.append(persona)
-                    persona.madre=raiz
-                return True
-            elif len(raiz.hijos) > 0:
-                for hijo in raiz.hijos:
-                    if self.__insertar_descendencia(hijo,persona)==True:
-                        return True
-            return False
-    def __insertar_sobrinos_primos(self,raiz:Nodo_persona,persona:Nodo_persona):
+                    persona.madre = raiz
+                return grado + 1
+            for hijo in raiz.hijos:
+                grado_hijo = self.__insertar_descendencia(hijo, persona, grado + 1)
+                if grado_hijo is not None:
+                    return grado_hijo
+        return None
+    
+    def __insertar_sobrinos_primos(self, raiz: Nodo_persona, persona: Nodo_persona, grado: int):
         if raiz:
             for hermano in raiz.hermanos:
-                if self.__insertar_descendencia(hermano,persona):
-                    return True
-            if self.__insertar_sobrinos_primos(raiz.padre,persona):
-                return True
-            if self.__insertar_sobrinos_primos(raiz.madre,persona):
-                return True
-        return False
+                grado_descendencia = self.__insertar_descendencia(hermano, persona, grado + 2)
+                if grado_descendencia is not None:
+                    return grado_descendencia
+            grado_padre = self.__insertar_sobrinos_primos(raiz.padre, persona, grado + 1)
+            if grado_padre is not None:
+                return grado_padre
+            grado_madre = self.__insertar_sobrinos_primos(raiz.madre, persona, grado + 1)
+            if grado_madre is not None:
+                return grado_madre
+        return None
     
     def guardar_json(self, raiz):
         data = {
@@ -187,7 +205,7 @@ def crear_grafico_arbol(personas_dict):
 
 # Creación del árbol genealógico según tu ejemplo
 Rodolfo = Nodo_persona(1, 0, 12, "Rodolfo", "Male", 80, "Single")
-Lucho = Nodo_persona(23, 0, 12, "Lucho", "Male", 70, "Married")
+Lucho = Nodo_persona(23, 1, 12, "Lucho", "Male", 70, "Married")
 Esteban = Nodo_persona(45, 23, 46, "Esteban", "Male", 65, "Married")
 Pablo = Nodo_persona(2, 1, 11, "Pablo", "Male", 55, "Single")
 ernesto = Nodo_persona(3, 2, 10, "Ernesto", "Male", 25, "Single")
@@ -196,21 +214,28 @@ pedro = Nodo_persona(22, 4, 89, "Pedro", "Male", 1, "Married")
 luish = Nodo_persona(13, 3, 9, "Hermano", "Male", 15, "Single")
 luish2 = Nodo_persona(15, 3, 9, "Hermano2", "Male", 15, "Single")
 luish3 = Nodo_persona(16, 3, 9, "Hermano3", "Male", 15, "Single")
+estebanh = Nodo_persona(88, 45, 123, "HijoE", "Male", 15, "Single")
 
 arbol=Arbol_genealogico_insertador()
 arbol.insertar_persona(pedro,luis)
 arbol.insertar_persona(pedro,ernesto)
 arbol.insertar_persona(pedro,Pablo)
-arbol.insertar_persona(pedro,Esteban)
-arbol.insertar_persona(pedro,Lucho)
 arbol.insertar_persona(pedro,Rodolfo)
-arbol.insertar_persona(pedro,luish)
+grado2 = arbol.insertar_persona(pedro,luish)
 arbol.insertar_persona(pedro,luish2)
 arbol.insertar_persona(pedro,luish3)
+grado1 = arbol.insertar_persona(pedro,Lucho)
+grado = arbol.insertar_persona(pedro,Esteban)
+grado3 = arbol.insertar_persona(pedro, estebanh)
 pass
 
+print(grado)
+print(grado1)
+print(grado2)
+print(grado3)
+
 # Lista de todas las personas
-personas = [Rodolfo, Lucho, Esteban, Pablo, ernesto, luis, pedro, luish, luish2, luish3]
+personas = [Rodolfo, Lucho, Esteban, Pablo, ernesto, luis, pedro, luish, luish2, luish3, estebanh]
 
 # Construcción del árbol genealógico
 personas_dict = construir_arbol(personas)
