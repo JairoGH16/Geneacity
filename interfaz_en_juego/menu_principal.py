@@ -1,27 +1,50 @@
 import pygame
-from interfaz_en_juego.botones.botones_menu_pausa import Boton_salir,Boton_volver
+from interfaz_en_juego.botones.botones_menu_pausa import Boton_salir
+from interfaz_en_juego.botones.boton import Boton
 class Menu_principal:
     def __init__(self,screen):
         self.screen=screen
         self.imagen_menu_principal=pygame.image.load("imagenes/interfaz/menu_principal/gui_menu_principal.png")
-        self.boton_salir=Boton_salir(self.screen,300,511,380,438)
-        self.boton_volver=Boton_volver(self.screen,300,511,443,501)
+        self.boton_nueva_partida=Boton(self.screen,300,511,340,398)
+        self.boton_nueva_partida.imagen_normal=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_nuevo1.png")
+        self.boton_nueva_partida.imagen_marcado=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_nuevo2.png")
+        self.boton_cargar_partida=Boton(self.screen,300,511,430,488)
+        self.boton_cargar_partida.imagen_normal=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_cargar1.png")
+        self.boton_cargar_partida.imagen_marcado=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_cargar2.png")
+        self.boton_historial=Boton(self.screen,300,511,530,588)
+        self.boton_historial.imagen_normal=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_historial1.png")
+        self.boton_historial.imagen_marcado=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_historial2.png")
+        self.boton_salir=Boton_salir(self.screen,300,511,630,688)
+        self.boton_info=Boton(self.screen,540,604,632,690)
+        self.boton_info.imagen_normal=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_info1.png")
+        self.boton_info.imagen_marcado=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_info2.png")
 
     def crear_interfaz_menu(self):
-        en_pausa=True
-        while en_pausa:
+        en_menu=True
+        while en_menu:
             #DIBUJAR IMAGEN
             self.screen.blit(self.imagen_menu_principal,(0,0))
+            self.boton_nueva_partida.boton_constante()
+            self.boton_cargar_partida.boton_constante()
+            self.boton_historial.boton_constante()
             self.boton_salir.boton_constante()
-            self.boton_volver.boton_constante()
+            self.boton_info.boton_constante()
             pygame.display.flip()
             pygame.time.delay(100)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    en_pausa = False
+                    en_menu = False
+                    pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.boton_volver.accion_clic():
-                        en_pausa = False  # Suponiendo que es_clic es un método de la clase Boton
-                    elif self.boton_salir.accion_clic():
+                    if self.boton_salir.accion_clic():
                         pygame.quit()  # Suponiendo que es_clic es un método de la clase Boton
+                    elif self.boton_nueva_partida.accion_clic():
+                        en_menu = False
+                    elif self.boton_cargar_partida.accion_clic():
+                        pass
+                    elif self.boton_historial.accion_clic():
+                        pass
+                    elif self.boton_info.accion_clic():
+                        pass
+                

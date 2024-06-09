@@ -103,10 +103,10 @@ class Game:
                 self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
 
         tiempo_actual = time.time()  # Obtener el tiempo actual cada vez que el bucle itera
-        if tiempo_actual - self.ultima_revision_minuto >= 20:  # Verifica si han pasado 60 segundos
+        if tiempo_actual - self.ultima_revision_minuto >= 60:  # Verifica si han pasado 60 segundos
             self.ultima_revision_minuto = tiempo_actual  # Reinicia el contador de tiempo
             self.admin_personajes.actualizar_edad(self.personaje)
-            self.vivo="ytt"
+            self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"]
         
 
 if __name__ == "__main__":
