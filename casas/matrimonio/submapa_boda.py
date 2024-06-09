@@ -10,7 +10,7 @@ class Submapa_boda(Interfaz_durante_mapa):
     def __init__(self,screen,lista_posiciones_casas):
         super().__init__(screen,lista_posiciones_casas)
 
-    def crear_interfaz_mapa(self,pretendiente,personaje_jugador,persona):
+    def crear_interfaz_mapa(self,pretendiente,personaje_jugador):
         self.imagen_fondo_mapa=pygame.image.load("imagenes/interfaz/mapa/gui_fondo_mapa.png")
         self.imagen_cubierta_mapa=pygame.image.load("imagenes/interfaz/mapa/gui_cubierta_mapa.png")
         self.boton_casa_imagen_normal=pygame.image.load("imagenes/interfaz/mapa/casa_en_mapa1.png")

@@ -28,6 +28,7 @@ class Game:
         self.muerte=Interfaz_durante_muerte(self.screen)
         self.menu_principal=Menu_principal(self.screen)
         self.inicializador_arbol:Inicializador_arbol=Inicializador_arbol()
+        self.mi_casa_id:int=None
 
     def juego_principal(self):
         while self.running:
@@ -96,10 +97,17 @@ class Game:
 
     def clic_en_casa(self, mouse_pos):
         for rect,casa_id in self.cargador_casas.casa_rects:
-            if rect.collidepoint(mouse_pos):
-                lista_casa=(consultas.Consulta_id_personas_casa.consultar_personas_casa(casa_id))  # Imprimir si se clickea sobre una casa
-                self.controlador_menu_casas.abrir_menu_casa(casa_id,lista_casa,self.lista_posiciones_casas,self.personaje)
-                return
+            if casa_id != self.mi_casa_id:
+                if rect.collidepoint(mouse_pos):
+                    lista_casa=(consultas.Consulta_id_personas_casa.consultar_personas_casa(casa_id))  # Imprimir si se clickea sobre una casa
+                    self.controlador_menu_casas.abrir_menu_casa(casa_id,lista_casa,self.lista_posiciones_casas,self.personaje,False)
+                    return
+            else:
+                if rect.collidepoint(mouse_pos):
+                    lista_casa=(consultas.Consulta_id_personas_casa.consultar_personas_casa(casa_id))  # Imprimir si se clickea sobre una casa
+                    self.controlador_menu_casas.abrir_menu_casa(casa_id,lista_casa,self.lista_posiciones_casas,self.personaje,True)
+                    return
+
 
     def acciones_temporales(self):
         current_time = time.time()

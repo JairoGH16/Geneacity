@@ -19,7 +19,7 @@ class Controlador_menu_casas:
         self.insertador_arbol=Insertador_casas_arbol(self.screen)
         self.submenu_matrimonio=Submenu_matrimonio(self.screen)
 
-    def abrir_menu_casa(self,id_casa,lista_personajes,lista_posiciones_casas,personaje_jugador):
+    def abrir_menu_casa(self,id_casa,lista_personajes,lista_posiciones_casas,personaje_jugador,propia:bool): #lo de propia indica sí es mi casa, si es True es mi casa
         nueva_lista=[]
         for persona in lista_personajes:
                 nueva_lista.append(Consulta_persona_por_id.consultar_persona(persona["id"]))
@@ -37,6 +37,10 @@ class Controlador_menu_casas:
             self.dibujador_personaje_interactuando.dibujar_personaje_interactuando(nueva_lista)
             self.boton_volver.boton_constante()
             self.dibujar_aviso_con_tiempo()
+
+            if propia==True:
+                 #AQUi VA LO DE TENER AL HIJO
+                 pass
 
             pygame.display.flip()
             pygame.time.delay(100)
@@ -64,7 +68,6 @@ class Controlador_menu_casas:
         mouse_pos=pygame.mouse.get_pos()
         x=mouse_pos[0]
         y=mouse_pos[1]
-        indice=0
         if y>241 and y<317:
             if x>221 and x<306:
                     indice=0
@@ -83,6 +86,9 @@ class Controlador_menu_casas:
                     indice=6
             if x>485 and x<569:
                     indice=7
-        if len(lista_personajes)-1>=indice:
-            if self.submenu_matrimonio.crear_menu_matrimonio(lista_personajes[indice],lista_posiciones_casas,personaje_jugador):
-                 return True
+        try:
+            if len(lista_personajes)-1>=indice:
+                if self.submenu_matrimonio.crear_menu_matrimonio(lista_personajes[indice],lista_posiciones_casas,personaje_jugador):
+                    return True
+        except:
+             print("No hay indice")
