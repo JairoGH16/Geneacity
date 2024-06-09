@@ -1,6 +1,6 @@
 import json
 # import consultas as consultas
-from nodos_arbol import Nodo_persona
+from arbol.nodos_arbol import Nodo_persona
 import pydot
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -250,6 +250,7 @@ class Arbol_genealogico_insertador:
     #         self.insertar_persona(raiz, sobrinos_primos)
     #         pass
 
+"""
 def construir_arbol(personas):
     personas_dict = {p.persona_id: p for p in personas}
     
@@ -328,3 +329,4 @@ plt.figure(figsize=(12, 8))
 nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=3000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
 plt.title("Árbol Genealógico")
 plt.show()
+"""

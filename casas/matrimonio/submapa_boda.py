@@ -2,12 +2,15 @@ import pygame
 from interfaz_en_juego.botones.botones_menu_pausa import Boton_volver
 from interfaz_en_juego.botones.botones_casas_mapa import Botones_casas_mapa
 from escritor_texto import Escritor
-class Interfaz_durante_mapa:
-    def __init__(self,screen,lista_posiciones_casas):
-        self.screen=screen
-        self.lista_posiciones_casas:list["tuple"]=lista_posiciones_casas
+from consultas import Casar_habitantes
 
-    def crear_interfaz_mapa(self):
+from interfaz_en_juego.interfaz_mapa import Interfaz_durante_mapa
+
+class Submapa_boda(Interfaz_durante_mapa):
+    def __init__(self,screen,lista_posiciones_casas):
+        super().__init__(screen,lista_posiciones_casas)
+
+    def crear_interfaz_mapa(self,pretendiente,personaje_jugador,persona):
         self.imagen_fondo_mapa=pygame.image.load("imagenes/interfaz/mapa/gui_fondo_mapa.png")
         self.imagen_cubierta_mapa=pygame.image.load("imagenes/interfaz/mapa/gui_cubierta_mapa.png")
         self.boton_casa_imagen_normal=pygame.image.load("imagenes/interfaz/mapa/casa_en_mapa1.png")
@@ -27,6 +30,7 @@ class Interfaz_durante_mapa:
             self.lista_botones_casas.append(boton)
         en_mapa=True
         while en_mapa:
+
             keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
             if keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]:
                     if self.posicion_mapa_y<6000:
@@ -60,8 +64,18 @@ class Interfaz_durante_mapa:
                      
             self.screen.blit(self.imagen_cubierta_mapa,(0,0))
             if coordenadas:
-                 self.escritor.escribir(280,685,f"X: {coordenadas[0]}   Y: {coordenadas[1]}",42,(0,0,0))
+                 self.escritor.escribir(210,715,f"X de esta casa: {coordenadas[0]}   Y de esta casa: {coordenadas[1]}",20,(0,0,0))
             self.boton_volver.boton_constante()
+
+            #AREA ORIGINAL
+            mouse_pos=pygame.mouse.get_pos()
+            mouse_x=mouse_pos[0]
+            mouse_y=mouse_pos[1]
+            posicion_x_escogiendo= (mouse_x-115)*16
+            posicion_y_escogiendo= -((mouse_y-553)*16)
+            if mouse_x>=112 and mouse_x<696 and mouse_y>=68 and mouse_y<562:
+                self.escritor.escribir(210,690,f"X a seleccionar: {posicion_x_escogiendo+self.posicion_mapa_x}   Y a seleccionar: {posicion_y_escogiendo+self.posicion_mapa_y}",20,(0,0,0))
+
             pygame.display.flip()
             pygame.time.delay(100)
             
@@ -72,3 +86,7 @@ class Interfaz_durante_mapa:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.boton_volver.accion_clic():
                         en_mapa = False
+                    elif event.button == 1:  # 1 es el botón izquierdo del mouse
+                        if mouse_x>=112 and mouse_x<696 and mouse_y>=68 and mouse_y<562:
+                            print(Casar_habitantes.unir_pareja(int(pretendiente["id"]),int(personaje_jugador["id"]),posicion_x_escogiendo,posicion_y_escogiendo))
+                            return True

@@ -98,7 +98,7 @@ class Game:
         for rect,casa_id in self.cargador_casas.casa_rects:
             if rect.collidepoint(mouse_pos):
                 lista_casa=(consultas.Consulta_id_personas_casa.consultar_personas_casa(casa_id))  # Imprimir si se clickea sobre una casa
-                self.controlador_menu_casas.abrir_menu_casa(casa_id,lista_casa)
+                self.controlador_menu_casas.abrir_menu_casa(casa_id,lista_casa,self.lista_posiciones_casas,self.personaje)
                 return
 
     def acciones_temporales(self):

@@ -84,7 +84,7 @@ class Consulta_habitantes_disponibles:
         consulta=consulta.json
         return consulta["inhabitants"]
 
-class Seleccionar_habitante: #NO UTILIZAR DE MOMENTO!!!!! no se deben gastar habitantes
+class Seleccionar_habitante:
     """Selecciona un habitante para iniciar la partida.
     """
     def seleccion_habitante(id_habitante:int):
@@ -97,7 +97,7 @@ class Seleccionar_habitante: #NO UTILIZAR DE MOMENTO!!!!! no se deben gastar hab
         consulta=consulta.json
         return consulta
 
-class Casar_habitantes: #NO UTILIZAR DE MOMENTO!!!!! no se deben gastar habitantes
+class Casar_habitantes:
     """Une dos habitantes de género opuesto en matrimonio, crea una nueva casa para ellos en la posición dada.
     """
     def unir_pareja(id_habitante1:int,id_habitante2:int,x:int,y:int):
