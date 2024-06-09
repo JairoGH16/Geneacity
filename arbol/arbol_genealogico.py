@@ -15,6 +15,7 @@ class Arbol_genealogico_insertador:
         self.sobrinos_primos_ids = []
 
     def insertar_persona(self,raiz,persona):
+
         if self.__insertar_hermanos_tios(raiz,persona):
             if persona.persona_id not in self.hermanos_tios_ids:
                 self.hermanos_tios_ids.append(persona.persona_id)
@@ -36,6 +37,7 @@ class Arbol_genealogico_insertador:
                 self.guardar_json(raiz)
             return True
         return False
+    
     def __insertar_hermanos_tios(self,raiz:Nodo_persona,persona:Nodo_persona):
         if raiz:
             if (raiz.padre_id == persona.padre_id and raiz.padre_id != 0) or (raiz.madre_id == persona.madre_id and raiz.madre_id != 0):
@@ -194,6 +196,18 @@ pedro = Nodo_persona(22, 4, 89, "Pedro", "Male", 1, "Married")
 luish = Nodo_persona(13, 3, 9, "Hermano", "Male", 15, "Single")
 luish2 = Nodo_persona(15, 3, 9, "Hermano2", "Male", 15, "Single")
 luish3 = Nodo_persona(16, 3, 9, "Hermano3", "Male", 15, "Single")
+
+arbol=Arbol_genealogico_insertador()
+arbol.insertar_persona(pedro,luis)
+arbol.insertar_persona(pedro,ernesto)
+arbol.insertar_persona(pedro,Pablo)
+arbol.insertar_persona(pedro,Esteban)
+arbol.insertar_persona(pedro,Lucho)
+arbol.insertar_persona(pedro,Rodolfo)
+arbol.insertar_persona(pedro,luish)
+arbol.insertar_persona(pedro,luish2)
+arbol.insertar_persona(pedro,luish3)
+pass
 
 # Lista de todas las personas
 personas = [Rodolfo, Lucho, Esteban, Pablo, ernesto, luis, pedro, luish, luish2, luish3]

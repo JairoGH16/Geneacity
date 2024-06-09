@@ -1,4 +1,5 @@
 import pygame
+from consultas import Consulta_persona_por_id as consulta_personaje
 
 class Administrador_personajes:
     def __init__(self,screen,edad,genero):    
@@ -16,6 +17,11 @@ class Administrador_personajes:
             self.indice_animacion=0
         else:
             self.indice_animacion+=1
+
+    def actualizar_edad(self,personaje):
+        self.edad_personaje=((consulta_personaje.consultar_persona(int(personaje["id"])))["age"])
+        personaje["age"]=self.edad_personaje
+        print(self.edad_personaje)
 
     def actualizar_personaje(self,tecla):
         if tecla==1073741903 or tecla==100:

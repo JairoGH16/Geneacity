@@ -1,18 +1,21 @@
 import pygame
 from escritor_texto import Escritor
 from personajes.dibujador_personajes import Dibujador_personajes
+from interfaz_en_juego.mensajes_avisos import Mensajes_avisos
+from interfaz_en_juego.botones.boton_pausa import Boton_pausa
 
 class Interfaz_durante_juego:
     def __init__(self,screen):
         self.screen=screen
         self.escritor=Escritor(self.screen)
         self.barra_personaje=pygame.image.load("imagenes/interfaz/gui_barra_personaje.png")
-        self.texto_limite=pygame.image.load("imagenes/cuadros_texto/limite_terreno.png")
+        self.boton_pausa=Boton_pausa(self.screen,712,794,24,86)
         self.dibujador_personaje=Dibujador_personajes(self.screen)
+        self.mensajes_avisos=Mensajes_avisos(self.screen)
 
     def dibujar_interfaz_juego(self,personaje,personaje_x,personaje_y):
+        #BARRA DE PERSONAJE
         self.screen.blit(self.barra_personaje, (0, 10))
-        
         self.escritor.escribir(40,134,f"{personaje_x}",18,(255, 255, 255))
         self.escritor.escribir(116,134,f"{personaje_y}",18,(255, 255, 255))
         self.dibujador_personaje._dibujar_un_personaje(personaje,51,51)
@@ -23,6 +26,9 @@ class Interfaz_durante_juego:
             self.escritor.escribir(300,35,f"{personaje["age"]}",45,(255, 255, 255))
         else:
             self.escritor.escribir(285,35,f"{personaje["age"]}",45,(255, 255, 255))
-        
-        if personaje_x == 0 or personaje_x >= 100000 or personaje_y == 0 or personaje_y >= 100000:
-            self.screen.blit(self.texto_limite, (290, 275))
+
+        #BOTONES
+        #Botón de pausa
+        self.boton_pausa.boton_constante()
+        #MANEJAR MENSAJES Y AVISOS
+        self.mensajes_avisos.dibujar_mensajes_avisos(personaje_x,personaje_y)

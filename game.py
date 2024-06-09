@@ -17,6 +17,7 @@ class Game:
         self.moviendose=False
         self.fondo_cesped=pygame.image.load("imagenes/escenario/esc_cesped.png")
         self.interfaz_durante_juego=Interfaz_durante_juego(self.screen)
+        self.ultima_revision_minuto = time.time()
 
     def juego_principal(self):
         self.personaje_x:int=15
@@ -44,7 +45,7 @@ class Game:
                 if self.personaje_x < 100000:
                     self.personaje_x += 15
             self.manejo_eventos()
-            self.repeat_actions()
+            self.acciones_temporales()
             pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
             self.screen.fill((0,0,0))
             Fondo.colocar_fondo(self.fondo_cesped,self.screen)
@@ -82,13 +83,19 @@ class Game:
                 print(consultas.Consulta_id_personas_casa.consultar_personas_casa(casa_id))  # Imprimir si se clickea sobre una casa
                 break
 
-    def repeat_actions(self):
+    def acciones_temporales(self):
         current_time = time.time()
         keys_to_check = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]
         for key in keys_to_check:
             if key in self.last_action_time and (current_time - self.last_action_time[key]) >= 5:
                 self.last_action_time[key] = current_time
                 self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
+
+        tiempo_actual = time.time()  # Obtener el tiempo actual cada vez que el bucle itera
+        if tiempo_actual - self.ultima_revision_minuto >= 60:  # Verifica si han pasado 60 segundos
+            self.ultima_revision_minuto = tiempo_actual  # Reinicia el contador de tiempo
+            self.admin_personajes.actualizar_edad(self.personaje)
+        
 
 if __name__ == "__main__":
     game = Game()
