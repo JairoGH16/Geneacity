@@ -23,4 +23,7 @@ class Nodo_persona:
         self.edad:int=edad
         self.estado_civil:str=estado_civil
         self.hermanos:list['Nodo_persona']=[]
-        self.hijos:list['Nodo_persona']=[]
+        self.hijos:list['Nodo_persona']=[] 
+        self.puntuacion:int=None  
+        self.grado:int=None
+        self.relacion:str=None
