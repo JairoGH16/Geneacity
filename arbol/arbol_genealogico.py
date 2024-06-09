@@ -20,6 +20,17 @@ class Arbol_genealogico_insertador:
             if persona.persona_id not in self.hermanos_tios_ids:
                 self.hermanos_tios_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
+                persona.grado=grado
+                if persona.grado == 2:
+                    persona.relacion = "Hermano/a"
+                elif persona.grado == 3:
+                    persona.relacion = "Tio/a"
+                elif persona.grado == 4:
+                    persona.relacion = "Tio Abuelo"
+                elif persona.grado == 5:
+                    persona.relacion = "Tio Bisabuelo"
+                elif persona.grado == 5:
+                    persona.relacion = "Tio Tatarabuelo"
             return grado
 
         grado = self.__insertar_ascendencia(raiz, persona, 0)
@@ -27,6 +38,17 @@ class Arbol_genealogico_insertador:
             if persona.persona_id not in self.ascendencia_ids:
                 self.ascendencia_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
+                persona.grado=grado
+                if persona.grado == 1:
+                    persona.relacion = "Padre/Madre"
+                elif persona.grado == 2:
+                    persona.relacion = "Abuelo/a"
+                elif persona.grado == 3:
+                    persona.relacion = "Bisabuelo/a"
+                elif persona.grado == 4:
+                    persona.relacion = "Tatarabuelo/a"
+                elif persona.grado == 5:
+                    persona.relacion = "Trastatarabuelo/a"
             return grado
 
         grado = self.__insertar_descendencia(raiz, persona, 0)
@@ -34,6 +56,17 @@ class Arbol_genealogico_insertador:
             if persona.persona_id not in self.descendencia_ids:
                 self.descendencia_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
+                persona.grado=grado
+                if persona.grado == 1:
+                    persona.relacion = "Hijo/a"
+                elif persona.grado == 2:
+                    persona.relacion = "Nieto/a"
+                elif persona.grado == 3:
+                    persona.relacion = "Bisnieto/a"
+                elif persona.grado == 4:
+                    persona.relacion = "Tataranieto/a"
+                elif persona.grado == 5:
+                    persona.relacion = "Trastataranieto"
             return grado
 
         grado = self.__insertar_sobrinos_primos(raiz, persona, 0)
@@ -41,6 +74,47 @@ class Arbol_genealogico_insertador:
             if persona.persona_id not in self.sobrinos_primos_ids:
                 self.sobrinos_primos_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
+                persona.grado=grado
+                if persona.grado == 3:
+                    persona.relacion = "Sobrino/a"
+                elif persona.grado == 4 and persona.padre.relacion == "Sobrino/a":
+                    persona.relacion = "Sobrino nieto"
+                elif persona.grado == 4 and persona.padre.relacion == "Tio/a":
+                    persona.relacion = "Primo/a"
+                elif persona.grado == 5 and persona.padre.relacion == "Sobrino nieto":
+                    persona.relacion = "Sobrino bisnieto"
+                elif persona.grado == 5 and persona.padre.relacion == "Primo/a":
+                    persona.relacion = "Sobrino Segundo"
+                elif persona.grado == 5:
+                    persona.relacion = "Tio Segundo"
+                elif persona.grado == 6 and persona.padre.relacion == "Sobrino bisnieto":
+                    persona.relacion = "Sobrino tataranieto"
+                elif persona.grado == 6 and persona.padre.relacion == "Sobrino Segundo":
+                    persona.relacion = "Sobrino nieto segundo"
+                elif persona.grado == 6 and persona.padre.relacion == "Tio Segundo":
+                    persona.relacion = "Primo segundo"
+                elif persona.grado == 6:
+                    persona.relacion = "Tio abuelo segundo"
+                elif persona.grado == 7 and persona.padre.relacion == "Sobrino nieto segundo":
+                    persona.relacion = "Sobrino bisnieto segundo"
+                elif persona.grado == 7 and persona.padre.relacion == "Primo segundo":
+                    persona.relacion = "Sobrino tercero"
+                elif persona.grado == 7 and persona.padre.relacion == "Tio abuelo segundo":
+                    persona.relacion = "Tio tercero"
+                elif persona.grado == 7:
+                    persona.relacion = "Tio bisabuelo segundo"
+                elif persona.grado == 8 and persona.padre.relacion == "Sobrino tercero":
+                    persona.relacion = "Sobrino nieto tercero"
+                elif persona.grado == 8 and persona.padre.relacion == "Tio tercero":
+                    persona.relacion = "Primo tercero"
+                elif persona.grado == 8 and persona.padre.relacion == "Tio bisabuelo segundo":
+                    persona.relacion = "Tio abuelo tercero"
+                elif persona.grado == 9 and persona.padre.relacion == "Primo tercero":
+                    persona.relacion = "Sobrino cuarto"
+                elif persona.grado == 9 and persona.padre.relacion == "Tio abuelo tercero":
+                    persona.relacion = "Tio cuarto"
+                elif persona.grado == 10 and persona.padre.relacion == "Tio cuarto":
+                    persona.relacion = "Primo cuarto"
             return grado
 
         return None
@@ -113,7 +187,7 @@ class Arbol_genealogico_insertador:
             if grado_madre is not None:
                 return grado_madre
         return None
-    
+
     def guardar_json(self, raiz):
         data = {
             "hermanos_tios": self.hermanos_tios_ids,
@@ -193,7 +267,7 @@ def crear_grafico_arbol(personas_dict):
     g = nx.DiGraph()
     
     for persona_id, persona in personas_dict.items():
-        label = f"{persona.nombre}\n{persona.edad} años"
+        label = f"{persona.nombre}\n{persona.edad} años\n{persona.relacion}"
         g.add_node(persona_id, label=label)
         
         if persona.padre:
@@ -215,9 +289,14 @@ luish = Nodo_persona(13, 3, 9, "Hermano", "Male", 15, "Single")
 luish2 = Nodo_persona(15, 3, 9, "Hermano2", "Male", 15, "Single")
 luish3 = Nodo_persona(16, 3, 9, "Hermano3", "Male", 15, "Single")
 estebanh = Nodo_persona(88, 45, 123, "HijoE", "Male", 15, "Single")
+estebanhh = Nodo_persona(86, 88, 122, "HijoEE", "Male", 15, "Single")
+pedroh = Nodo_persona(75, 22, 121, "HijoP", "Male", 15, "Single")
+pedrohh = Nodo_persona(74, 75, 120, "HijoPP", "Male", 15, "Single")
 
 arbol=Arbol_genealogico_insertador()
-arbol.insertar_persona(pedro,luis)
+pedro.puntuacion = 0
+pedro.puntuacion+=(arbol.insertar_persona(pedro,luis)*5)
+print(pedro.puntuacion)
 arbol.insertar_persona(pedro,ernesto)
 arbol.insertar_persona(pedro,Pablo)
 arbol.insertar_persona(pedro,Rodolfo)
@@ -227,15 +306,13 @@ arbol.insertar_persona(pedro,luish3)
 grado1 = arbol.insertar_persona(pedro,Lucho)
 grado = arbol.insertar_persona(pedro,Esteban)
 grado3 = arbol.insertar_persona(pedro, estebanh)
+gradof = arbol.insertar_persona(pedro, estebanhh)
+arbol.insertar_persona(pedro, pedroh)
+arbol.insertar_persona(pedro, pedrohh)
 pass
 
-print(grado)
-print(grado1)
-print(grado2)
-print(grado3)
-
 # Lista de todas las personas
-personas = [Rodolfo, Lucho, Esteban, Pablo, ernesto, luis, pedro, luish, luish2, luish3, estebanh]
+personas = [Rodolfo, Lucho, Esteban, Pablo, ernesto, luis, pedro, luish, luish2, luish3, estebanh, estebanhh, pedroh, pedrohh]
 
 # Construcción del árbol genealógico
 personas_dict = construir_arbol(personas)
