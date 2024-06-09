@@ -19,7 +19,7 @@ class Administrador_personajes:
             self.indice_animacion+=1
 
     def actualizar_edad(self,personaje):
-        self.edad_personaje=((consulta_personaje.consultar_persona(int(personaje["id"])))["age"])
+        self.edad_personaje=int((consulta_personaje.consultar_persona(int(personaje["id"])))["age"])
         personaje["age"]=self.edad_personaje
         print(self.edad_personaje)
 
