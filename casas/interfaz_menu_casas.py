@@ -70,3 +70,29 @@ class Dibujador_personaje_interactuando(Dibujador_personajes):
                 else:
                     escritor.escribir(400,613,f"{personaje["age"]}",60,(0, 0, 0))
                 self._dibujar_un_personaje(personaje,253,593)
+
+class Dibujar_avisos_casas:
+    def __init__(self,screen):
+        self.screen=screen
+        self.escritor=Escritor(self.screen)
+        self.fondo_aviso_rojo=pygame.image.load("imagenes/cuadros_texto/fondo_aviso_no_encontrado.png")
+        self.fondo_aviso_verde=pygame.image.load("imagenes/cuadros_texto/fondo_aviso_encontrado.png")
+    def dibujar_aviso_rojo(self):
+        self.screen.blit(self.fondo_aviso_rojo, (355, 25))
+        self.escritor.escribir(415,40,"¡No se han agregado",19,(0,0,0))
+        self.escritor.escribir(400,70,"nuevas personas al árbol!",19,(0,0,0))
+    def dibujar_aviso_verde(self,lista_nombres:list):
+        self.screen.blit(self.fondo_aviso_verde, (355, 25))
+        self.escritor.escribir(368,35,f"¡Se han agregado {len(lista_nombres)} personas nuevas al árbol!",13,(0,0,0))
+        y = 50
+        indice=0
+        for nombre in lista_nombres:
+            if indice <=3:
+                self.escritor.escribir(370,y,f"{nombre}",10,(0,0,0))
+                y += 12
+            if indice ==3:
+                self.escritor.escribir(520,y,f"{nombre}",10,(0,0,0))
+                y = 50
+            if indice >=3:
+                self.escritor.escribir(520,y,f"{nombre}",10,(0,0,0))
+                y += 12

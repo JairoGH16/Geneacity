@@ -18,6 +18,7 @@ class Game:
         self.screen = pygame.display.set_mode((800, 800))
         self.running = True
         self.last_action_time = {}
+        self.lista_posiciones_casas:list["tuple"]=[]
         self.cargador_casas = Cargador_casas()
         self.moviendose=False
         self.fondo_cesped=pygame.image.load("imagenes/escenario/esc_cesped.png")
@@ -44,15 +45,15 @@ class Game:
             self.admin_personajes:Administrador_personajes=Administrador_personajes(self.screen,self.personaje["age"],self.personaje["gender"])
 
             self.admin_personajes.actualizar_personaje(115)
-            self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
+            self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
             while self.vivo == "Alive":
                 keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
                 if keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]:
-                    if self.personaje_y > 0:
-                        self.personaje_y -= 15
-                if keys_pressed[pygame.K_s] or keys_pressed[pygame.K_DOWN]:
                     if self.personaje_y < 100000:
                         self.personaje_y += 15
+                if keys_pressed[pygame.K_s] or keys_pressed[pygame.K_DOWN]:
+                    if self.personaje_y >0:
+                        self.personaje_y -= 15
                 if keys_pressed[pygame.K_a] or keys_pressed[pygame.K_LEFT]:
                     if self.personaje_x > 0:
                         self.personaje_x -= 15
@@ -68,7 +69,7 @@ class Game:
                     self.admin_personajes.actualizar_indice_personaje()
                 self.cargador_casas.dibujar_casas(self.screen,self.personaje_x,self.personaje_y)
                 self.admin_personajes.dibujar_personaje()
-                self.interfaz_durante_juego.dibujar_interfaz_juego(self.personaje,self.personaje_x,self.personaje_y)
+                self.interfaz_durante_juego.crear_interfaz_juego(self.personaje,self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
                 pygame.display.flip()  # Actualizar la pantalla
             self.muerte.crear_aviso_muerte(self.personaje["name"])
         pygame.quit()
@@ -80,7 +81,7 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 self.moviendose=True
                 if event.key in [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
-                    self.cargador_casas.tecla_presionada(event.key,self.last_action_time,self.personaje_x,self.personaje_y)
+                    self.cargador_casas.tecla_presionada(event.key,self.last_action_time,self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
                     self.admin_personajes.actualizar_personaje(event.key)
             elif event.type == pygame.KEYUP:
                 keys_pressed = pygame.key.get_pressed()  # Retorna un array de bools para cada tecla
@@ -106,7 +107,7 @@ class Game:
         for key in keys_to_check:
             if key in self.last_action_time and (current_time - self.last_action_time[key]) >= 5:
                 self.last_action_time[key] = current_time
-                self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y)
+                self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
 
         tiempo_actual = time.time()  # Obtener el tiempo actual cada vez que el bucle itera
         if tiempo_actual - self.ultima_revision_minuto >= 60:  # Verifica si han pasado 60 segundos
