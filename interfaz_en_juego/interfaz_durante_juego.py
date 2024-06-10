@@ -4,6 +4,7 @@ from personajes.dibujador_personajes import Dibujador_personajes
 from interfaz_en_juego.mensajes_avisos import Mensajes_avisos
 from interfaz_en_juego.botones.boton_pausa import Boton_pausa
 from interfaz_en_juego.botones.boton_mapa import Boton_mapa
+from interfaz_en_juego.botones.boton_arbol import Boton_arbol
 
 class Interfaz_durante_juego:
     def __init__(self,screen):
@@ -14,6 +15,7 @@ class Interfaz_durante_juego:
         self.boton_mapa=Boton_mapa(self.screen,612,694,24,86)
         self.dibujador_personaje=Dibujador_personajes(self.screen)
         self.mensajes_avisos=Mensajes_avisos(self.screen)
+        self.boton_arbol=Boton_arbol(self.screen)
 
     def crear_interfaz_juego(self,personaje,personaje_x,personaje_y,lista_posiciones_casas):
         #BARRA DE PERSONAJE
@@ -33,5 +35,6 @@ class Interfaz_durante_juego:
         #Botón de pausa
         self.boton_pausa.boton_constante()
         self.boton_mapa.boton_constante(lista_posiciones_casas)
+        self.boton_arbol.boton_constante()
         #MANEJAR MENSAJES Y AVISOS
         self.mensajes_avisos.dibujar_mensajes_avisos(personaje_x,personaje_y)

@@ -1,6 +1,6 @@
 import json
-import consultas
-from nodos_arbol import Nodo_persona
+import arbol.consultas as consultas
+from arbol.nodos_arbol import Nodo_persona
 import pydot
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -214,7 +214,6 @@ class Arbol_genealogico_insertador:
         with open(nombre_archivo, "w") as file:
             json.dump(data, file, indent=4)
         
-        arbol_grafico()
 
     def cargar_json(self, raiz):
         personas.append(raiz)
@@ -304,7 +303,6 @@ class Arbol_genealogico_insertador:
             self.insertar_persona(raiz_real, sobrinos_primos)
             personas.append(sobrinos_primos)
         
-        arbol_grafico()
         pass
     
     def actualizar_registro(self, nombre_archivo):
@@ -373,6 +371,3 @@ def arbol_grafico():
     nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=5000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
     plt.title("Árbol Genealógico")
     plt.show()
-
-arbol = Arbol_genealogico_insertador()
-arbol.cargar_arbol(5118)

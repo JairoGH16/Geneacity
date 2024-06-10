@@ -40,7 +40,7 @@ class Game:
             self.personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
             self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"]
             print(self.personaje)
-            consultas.Seleccionar_habitante.seleccion_habitante(self.personaje["id"])
+            #consultas.Seleccionar_habitante.seleccion_habitante(self.personaje["id"])
             self.nodo_raiz_arbol:Nodo_persona=self.inicializador_arbol.inicializar_arbol(int(self.personaje["id"]))
             self.controlador_menu_casas=Controlador_menu_casas(self.screen,self.nodo_raiz_arbol)
 
