@@ -17,6 +17,15 @@ class Arbol_genealogico_insertador:
         self.actualizar_registro = "archivos_registrados.json"
 
     def insertar_persona(self, raiz, persona):
+        """Se encarga de insertar las personas en el arbol genealogico
+
+        Args:
+            raiz (_type_): Persona a partir de la cual se insertan las personas
+            persona (_type_): Persona a insertar
+
+        Returns:
+            _type_: Retorna el grado de familia respecto al jugador
+        """
         grado = self.__insertar_hermanos_tios(raiz, persona, 0)
         if grado is not None:
             if persona.persona_id not in self.hermanos_tios_ids:
@@ -204,6 +213,11 @@ class Arbol_genealogico_insertador:
         return None
 
     def guardar_json(self, raiz):
+        """Se encarga de guardar en archivos .json las id de las personas que forman parte del arbol
+
+        Args:
+            raiz (_type_): persona base del arbol
+        """
         data = {
             "hermanos_tios": self.hermanos_tios_ids,
             "ascendencia": self.ascendencia_ids,
@@ -216,6 +230,11 @@ class Arbol_genealogico_insertador:
         
 
     def cargar_json(self, raiz):
+        """Se encarga de cargar los datos que se encuentran en el archivo json
+
+        Args:
+            raiz (_type_): _description_
+        """
         personas.append(raiz)
         nombre_archivo = f"arbol_genealogico{raiz.persona_id}.json"
         with open(nombre_archivo, "r") as file:
@@ -227,6 +246,11 @@ class Arbol_genealogico_insertador:
 
 
     def cargar_arbol(self, raiz):
+        """A partir de los datos cargados, esta funcion se encarga de volver a armar el arbol genealogico
+
+        Args:
+            raiz (_type_): raiz que se usara para el arbol
+        """
         info_persona = consultas.Consulta_persona_por_id.consultar_persona(raiz)
         raiz_real = Nodo_persona(info_persona["id"],
                                  info_persona["father"],
@@ -304,29 +328,16 @@ class Arbol_genealogico_insertador:
             personas.append(sobrinos_primos)
         
         pass
-    
-    def actualizar_registro(self, nombre_archivo):
-        try:
-            with open(self.archivo_registro, "r") as file:
-                archivos = json.load(file)
-        except FileNotFoundError:
-            archivos = []
-
-        if nombre_archivo not in archivos:
-            archivos.append(nombre_archivo)
-
-        with open(self.archivo_registro, "w") as file:
-            json.dump(archivos, file, indent=4)
-
-    def cargar_registro(self):
-        try:
-            with open(self.archivo_registro, "r") as file:
-                archivos = json.load(file)
-                return archivos
-        except FileNotFoundError:
-            return []
 
 def construir_arbol(personas):
+    """Funcion para construir el arbol de manera grafica
+
+    Args:
+        personas (_type_): personas que formaran parte del arbol
+
+    Returns:
+        _type_: dicccionario con las personas
+    """
     personas_dict = {p.persona_id: p for p in personas}
     
     for persona in personas:
@@ -340,6 +351,14 @@ def construir_arbol(personas):
     return personas_dict
 
 def crear_grafico_arbol(personas_dict):
+    """Se encarga de crear el grafico para el arbol
+
+    Args:
+        personas_dict (_type_): Diccionario con las personas y sus relaciones
+
+    Returns:
+        _type_: retorna el grafico
+    """
     g = nx.DiGraph()
     
     for persona_id, persona in personas_dict.items():
@@ -357,6 +376,8 @@ def crear_grafico_arbol(personas_dict):
 personas = []
 
 def arbol_grafico():
+    """Llama a las funciones para crear el arbol graficamente y mostrarlo en pantalla
+    """
     # Construcción del árbol genealógico
     personas_dict = construir_arbol(personas)
 
