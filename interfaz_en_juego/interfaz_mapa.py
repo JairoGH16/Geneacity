@@ -8,6 +8,8 @@ class Interfaz_durante_mapa:
         self.lista_posiciones_casas:list["tuple"]=lista_posiciones_casas
 
     def crear_interfaz_mapa(self):
+        """Crea un mapa donde se puede ver cada casa descubierta más rápido
+        """
         self.imagen_fondo_mapa=pygame.image.load("imagenes/interfaz/mapa/gui_fondo_mapa.png")
         self.imagen_cubierta_mapa=pygame.image.load("imagenes/interfaz/mapa/gui_cubierta_mapa.png")
         self.boton_casa_imagen_normal=pygame.image.load("imagenes/interfaz/mapa/casa_en_mapa1.png")

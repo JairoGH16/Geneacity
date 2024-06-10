@@ -14,6 +14,8 @@ from arbol.inicializador_arbol import Inicializador_arbol
 
 class Game:
     def __init__(self):
+        """inicializa el juego
+        """
         pygame.init()
         self.screen = pygame.display.set_mode((800, 800))
         self.running = True
@@ -31,16 +33,18 @@ class Game:
         self.mi_casa_id:int=None
 
     def juego_principal(self):
+        """ciclo del juego, si el jugador muere vuelve al inicio
+        """
         while self.running:
             self.menu_principal.crear_interfaz_menu()
-            self.personaje_x:int=15
+            self.personaje_x:int=15 #posiciones de inicio del juego
             self.personaje_y:int=15
 
             self.controlador_menu_personaje=Controlador_menu_personaje(self.screen,self.personaje_x,self.personaje_y)
             self.personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
-            self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"]
+            self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"] #consultar si está vivo el jugador
             print(self.personaje)
-            #consultas.Seleccionar_habitante.seleccion_habitante(self.personaje["id"])
+            consultas.Seleccionar_habitante.seleccion_habitante(self.personaje["id"]) #Seleccionar_personaje
             self.nodo_raiz_arbol:Nodo_persona=self.inicializador_arbol.inicializar_arbol(int(self.personaje["id"]))
             self.controlador_menu_casas=Controlador_menu_casas(self.screen,self.nodo_raiz_arbol)
 
@@ -49,7 +53,7 @@ class Game:
             self.admin_personajes.actualizar_personaje(115)
             self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
             while self.vivo == "Alive":
-                keys_pressed = pygame.key.get_pressed()  # Revisar el estado de las teclas fuera de los eventos
+                keys_pressed = pygame.key.get_pressed()  # Hacer que la posición del personaje cambie con las flechas o con WASD
                 if keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]:
                     if self.personaje_y < 100000:
                         self.personaje_y += 15
@@ -63,20 +67,23 @@ class Game:
                     if self.personaje_x < 100000:
                         self.personaje_x += 15
                 self.manejo_eventos()
-                self.acciones_temporales()
-                pygame.time.delay(50)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
+                self.acciones_temporales() #acciones que tienen temporizadores
+                pygame.time.delay(50)
                 self.screen.fill((0,0,0))
                 Fondo.colocar_fondo(self.fondo_cesped,self.screen)
                 if self.moviendose:
-                    self.admin_personajes.actualizar_indice_personaje()
+                    self.admin_personajes.actualizar_indice_personaje() #cambia los sprites del personaje para crear la animación
                 self.cargador_casas.dibujar_casas(self.screen,self.personaje_x,self.personaje_y)
                 self.admin_personajes.dibujar_personaje()
-                self.interfaz_durante_juego.crear_interfaz_juego(self.personaje,self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
+                #imprimir la interfaz principal
+                self.interfaz_durante_juego.crear_interfaz_juego(self.nodo_raiz_arbol,self.personaje,self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
                 pygame.display.flip()  # Actualizar la pantalla
-            self.muerte.crear_aviso_muerte(self.personaje["name"])
+            self.muerte.crear_aviso_muerte(self.personaje["name"]) #si se sale del ciclo vivo, es porque el jugador murió, se pasa a avisar y a reiniciar
         pygame.quit()
 
     def manejo_eventos(self):
+        """maneja los eventos de cada ciclo
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -84,19 +91,24 @@ class Game:
                 self.moviendose=True
                 if event.key in [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                     self.cargador_casas.tecla_presionada(event.key,self.last_action_time,self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
-                    self.admin_personajes.actualizar_personaje(event.key)
+                    self.admin_personajes.actualizar_personaje(event.key) #Actualiza la apariencia
             elif event.type == pygame.KEYUP:
-                keys_pressed = pygame.key.get_pressed()  # Retorna un array de bools para cada tecla
-                if not any(keys_pressed):  # `any()` retorna True si al menos una tecla está presionada
-                    self.moviendose=False
+                keys_pressed = pygame.key.get_pressed() 
+                if not any(keys_pressed):
+                    self.moviendose=False #se deja de cambiar de posición
                 if event.key in self.last_action_time:
                     self.cargador_casas.tecla_alzada(event.key,self.last_action_time)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Verificar si el botón es el izquierdo
-                if event.button == 1:  # 1 es el botón izquierdo del mouse
+                if event.button == 1:
                     self.clic_en_casa(event.pos)
 
-    def clic_en_casa(self, mouse_pos):
+    def clic_en_casa(self, mouse_pos:tuple):
+        """verifica si se hace clic a las casas
+
+        Args:
+            mouse_pos (tuple): _posición del mouse_
+        """
         for rect,casa_id in self.cargador_casas.casa_rects:
             if casa_id != self.mi_casa_id:
                 if rect.collidepoint(mouse_pos):
@@ -111,18 +123,20 @@ class Game:
 
 
     def acciones_temporales(self):
+        """acciones con temporizador
+        """
         current_time = time.time()
         keys_to_check = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]
         for key in keys_to_check:
             if key in self.last_action_time and (current_time - self.last_action_time[key]) >= 5:
                 self.last_action_time[key] = current_time
-                self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y,self.lista_posiciones_casas)
+                self.cargador_casas.recargar_casas(self.personaje_x,self.personaje_y,self.lista_posiciones_casas) #cargar casas
 
         tiempo_actual = time.time()  # Obtener el tiempo actual cada vez que el bucle itera
         if tiempo_actual - self.ultima_revision_minuto >= 60:  # Verifica si han pasado 60 segundos
             self.ultima_revision_minuto = tiempo_actual  # Reinicia el contador de tiempo
             self.admin_personajes.actualizar_edad(self.personaje)
-            self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"]
+            self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"] #ver si está vivo, si no para salir del ciclo del juego
         
 
 if __name__ == "__main__":

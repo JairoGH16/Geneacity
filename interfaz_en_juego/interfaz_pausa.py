@@ -8,6 +8,8 @@ class Interfaz_durante_pausa:
         self.boton_volver=Boton_volver(self.screen,300,511,443,501)
 
     def crear_interfaz_pausa(self):
+        """Pausa el juego y facilita la opción de salir
+        """
         en_pausa=True
         while en_pausa:
             #DIBUJAR IMAGEN

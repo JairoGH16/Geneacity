@@ -1,6 +1,8 @@
 import pygame
 
 class Dibujador_personajes:
+    """Dibuja personajes
+    """
     def __init__(self,screen):
         self.screen=screen
         self.sprite_bebe=pygame.image.load("personajes/bebe/abajo1.png")
@@ -16,6 +18,8 @@ class Dibujador_personajes:
         self.sprite_adulta_mayor=pygame.image.load("personajes/adulta_mayor/abajo_derecha1.png")
 
     def _dibujar_un_personaje(self,personaje,x,y):
+        """_Dibuja un personaje según su edad
+        """
         if int(personaje["age"])<2:
                 self.screen.blit(self.sprite_bebe, (x, y))
         elif personaje["gender"]=="Male":

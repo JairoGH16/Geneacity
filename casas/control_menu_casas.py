@@ -19,7 +19,7 @@ class Controlador_menu_casas:
         self.dibujador_personaje_interactuando=Dibujador_personaje_interactuando(self.screen)
         self.dibujador_avisos=Dibujar_avisos_casas(self.screen)
         self.boton_volver=Boton_volver(self.screen,292,503,710,768)
-        self.insertador_arbol=Insertador_casas_arbol(self.screen)
+        self.insertador_arbol=Insertador_casas_arbol(self.nodo_raiz)
         self.submenu_matrimonio=Submenu_matrimonio(self.screen)
         self.boton_hijo=Boton_tener_hijo(self.screen,240,398,50,94)
         self.boton_hija=Boton_tener_hija(self.screen,40,198,50,94)
@@ -43,7 +43,6 @@ class Controlador_menu_casas:
             self.dibujador_personajes_lista.dibujar_personajes_casa(id_casa,nueva_lista)
             self.dibujador_personaje_interactuando.dibujar_personaje_interactuando(nueva_lista)
 
-            #if propia==True:
             self.boton_hijo.boton_constante()
             self.boton_hija.boton_constante()
 

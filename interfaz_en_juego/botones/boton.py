@@ -1,6 +1,8 @@
 import pygame
 
 class Boton:
+    """Clase que forma botones
+    """
     def __init__(self,screen,x_inicial,x_final,y_inicial,y_final):
         self.screen=screen
         self.imagen_normal=None
@@ -12,6 +14,8 @@ class Boton:
         self.marcado:bool=False
     
     def boton_constante(self):
+        """revisión constante del estado de los botones
+        """
         mouse_pos = pygame.mouse.get_pos()
         if mouse_pos[0] >= self.x_inicial and mouse_pos[0]<= self.x_final: #x
             if mouse_pos[1] >= self.y_inicial and mouse_pos[1]<= self.y_final: #y

@@ -2,6 +2,8 @@ import pygame
 import sys
 
 class Escritor:
+    """escribe textos con fuente "Dubai"
+    """
     def __init__(self,screen):
         self.screen=screen
     def escribir(self,x:int,y:int,texto:str,tamaño:int,color):

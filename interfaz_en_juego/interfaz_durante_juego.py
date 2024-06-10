@@ -7,6 +7,8 @@ from interfaz_en_juego.botones.boton_mapa import Boton_mapa
 from interfaz_en_juego.botones.boton_arbol import Boton_arbol
 
 class Interfaz_durante_juego:
+    """Dibuja toda la interfaz durante el recorrido en el mapa principal
+    """
     def __init__(self,screen):
         self.screen=screen
         self.escritor=Escritor(self.screen)
@@ -17,9 +19,12 @@ class Interfaz_durante_juego:
         self.mensajes_avisos=Mensajes_avisos(self.screen)
         self.boton_arbol=Boton_arbol(self.screen)
 
-    def crear_interfaz_juego(self,personaje,personaje_x,personaje_y,lista_posiciones_casas):
+    def crear_interfaz_juego(self,nodo_raiz,personaje,personaje_x,personaje_y,lista_posiciones_casas):
+        """Crea las interfaces
+        """
         #BARRA DE PERSONAJE
         self.screen.blit(self.barra_personaje, (0, 10))
+        self.escritor.escribir(250,90,f"{nodo_raiz.puntaje}",18,((255, 255, 255)))
         self.escritor.escribir(40,134,f"{personaje_x}",18,(255, 255, 255))
         self.escritor.escribir(116,134,f"{personaje_y}",18,(255, 255, 255))
         self.dibujador_personaje._dibujar_un_personaje(personaje,51,51)

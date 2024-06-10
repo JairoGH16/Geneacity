@@ -2,6 +2,8 @@ import pygame
 from interfaz_en_juego.botones.botones_menu_pausa import Boton_salir
 from interfaz_en_juego.botones.boton import Boton
 class Menu_principal:
+    """Menú inicial del juego
+    """
     def __init__(self,screen):
         self.screen=screen
         self.imagen_menu_principal=pygame.image.load("imagenes/interfaz/menu_principal/gui_menu_principal.png")
@@ -15,11 +17,10 @@ class Menu_principal:
         self.boton_historial.imagen_normal=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_historial1.png")
         self.boton_historial.imagen_marcado=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_historial2.png")
         self.boton_salir=Boton_salir(self.screen,300,511,630,688)
-        self.boton_info=Boton(self.screen,540,604,632,690)
-        self.boton_info.imagen_normal=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_info1.png")
-        self.boton_info.imagen_marcado=pygame.image.load("imagenes/interfaz/menu_principal/gui_boton_info2.png")
 
     def crear_interfaz_menu(self):
+        """Crea el menú inicial
+        """
         en_menu=True
         while en_menu:
             #DIBUJAR IMAGEN
@@ -28,7 +29,6 @@ class Menu_principal:
             self.boton_cargar_partida.boton_constante()
             self.boton_historial.boton_constante()
             self.boton_salir.boton_constante()
-            self.boton_info.boton_constante()
             pygame.display.flip()
             pygame.time.delay(50)
             
@@ -45,6 +45,3 @@ class Menu_principal:
                         pass
                     elif self.boton_historial.accion_clic():
                         pass
-                    elif self.boton_info.accion_clic():
-                        pass
-                

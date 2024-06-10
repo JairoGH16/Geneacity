@@ -3,6 +3,8 @@ from escritor_texto import Escritor
 from personajes.enlistador_seleccion import Enlistador_seleccionador_personajes
 
 class Dibujador_personajes_seleccionador(Dibujador_personajes):
+    """Dibuja personajes
+    """
     def __init__(self,screen,enlistador):
         super().__init__(screen)
         self.enlistador=enlistador
@@ -49,7 +51,9 @@ class Dibujador_personajes_disponibles(Dibujador_personajes_seleccionador):
                 self._dibujar_un_personaje(lista_personajes[11],513,427)
 
 class Dibujador_personaje_seleccionando(Dibujador_personajes_seleccionador):
-        def dibujar_personaje_seleccionando(self,mouse_pos,enlistador:Enlistador_seleccionador_personajes):
+    """Dibuja el personaje sobre el que se posa el mouse
+    """
+    def dibujar_personaje_seleccionando(self,mouse_pos,enlistador:Enlistador_seleccionador_personajes):
             escritor=Escritor(self.screen)
             lista_personajes=enlistador.lista_habitantes_impresos
             x=mouse_pos[0]

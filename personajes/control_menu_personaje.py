@@ -3,6 +3,8 @@ from personajes.enlistador_seleccion import Enlistador_seleccionador_personajes
 from personajes.interfaz_seleccion_personaje import Dibujador_personajes_disponibles,Dibujador_personaje_seleccionando
 
 class Controlador_menu_personaje:
+    """Controla el menú de selección
+    """
     def __init__(self,screen,personaje_x:int,personaje_y:int):
         self.screen=screen
         self.enlistador=Enlistador_seleccionador_personajes()
@@ -14,6 +16,8 @@ class Controlador_menu_personaje:
         self.imagen_menu=pygame.image.load("imagenes/interfaz/gui_seleccion_personaje.png")
         self.mouse_pos=(0,0)
     def menu_seleccion_personaje(self):
+        """Dibuja el menú
+        """
         self.seleccionando_personaje=True
         while self.seleccionando_personaje:
             self.mouse_pos = pygame.mouse.get_pos()
@@ -42,6 +46,8 @@ class Controlador_menu_personaje:
                             return tupla_seleccion[1]
 
     def seleccionar_personaje(self):
+        """Selecciona el personaje presionado
+        """
         lista_personajes=self.enlistador.lista_habitantes_impresos
         x=self.mouse_pos[0]
         y=self.mouse_pos[1]

@@ -2,6 +2,8 @@ import pygame
 from arbol.consultas import Consulta_persona_por_id as consulta_personaje
 
 class Administrador_personajes:
+    """Controla qué tipo de personaje aparece según su edad, actualiza la edad, revisa la dirección.
+    """
     def __init__(self,screen,edad,genero):    
     # Inicializar Pygame
         pygame.init()
@@ -80,6 +82,8 @@ class Personaje:
         """
         #screen.blit(self.nombre_de_imagen, (x, y))
         raise NotImplementedError("Este método debe ser implementado por las subclases.")
+
+###Cada subclase de personaje se mueve igual pero tiene otros sprites según la edad.
 
 class Adulto_joven(Personaje):
     def __init__(self,screen):

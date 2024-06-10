@@ -17,7 +17,6 @@ class Nodo_persona:
         self.madre_id:int=madre_id
         self.padre:Nodo_persona=None
         self.madre:Nodo_persona=None
-        self.conyugue:Nodo_persona=None
         self.nombre:str=nombre
         self.genero:str=genero
         self.edad:int=edad
@@ -27,3 +26,4 @@ class Nodo_persona:
         self.puntuacion:int=None  
         self.grado:int=None
         self.relacion:str=None
+        self.puntaje:int=0

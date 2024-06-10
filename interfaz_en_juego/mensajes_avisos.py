@@ -1,6 +1,8 @@
 import pygame
 
 class Mensajes_avisos:
+    """Da avisos
+    """
     def __init__(self,screen):
         self.screen=screen
         self.texto_limite=pygame.image.load("imagenes/cuadros_texto/limite_terreno.png")

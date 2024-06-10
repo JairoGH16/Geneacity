@@ -8,6 +8,8 @@ class Interfaz_durante_muerte:
         self.escritor=Escritor(self.screen)
 
     def crear_aviso_muerte(self,nombre:str):
+        """Muestra el aviso de que el personaje murió
+        """
         en_muerte=True
         while en_muerte:
             #DIBUJAR IMAGEN
