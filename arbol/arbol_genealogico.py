@@ -204,7 +204,8 @@ class Arbol_genealogico_insertador:
         with open(nombre_archivo, "w") as file:
             json.dump(data, file, indent=4)
         
-        self.actualizar_registro(nombre_archivo)
+        arbol_grafico()
+
 
     def cargar_json(self, raiz):
         nombre_archivo = f"arbol_genealogico{raiz.nombre}.json"
@@ -310,17 +311,18 @@ def crear_grafico_arbol(personas_dict):
 # Lista de todas las personas
 personas = []
 
-# Construcción del árbol genealógico
-personas_dict = construir_arbol(personas)
+def arbol_grafico():
+    # Construcción del árbol genealógico
+    personas_dict = construir_arbol(personas)
 
-# Creación del gráfico del árbol genealógico
-grafico_arbol = crear_grafico_arbol(personas_dict)
+    # Creación del gráfico del árbol genealógico
+    grafico_arbol = crear_grafico_arbol(personas_dict)
 
-# Visualización del gráfico
-pos = graphviz_layout(grafico_arbol, prog="dot")
-labels = nx.get_node_attributes(grafico_arbol, 'label')
+    # Visualización del gráfico
+    pos = graphviz_layout(grafico_arbol, prog="dot")
+    labels = nx.get_node_attributes(grafico_arbol, 'label')
 
-plt.figure(figsize=(12, 8))
-nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=5000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
-plt.title("Árbol Genealógico")
-plt.show()
+    plt.figure(figsize=(12, 8))
+    nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=5000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
+    plt.title("Árbol Genealógico")
+    plt.show()
