@@ -1,4 +1,4 @@
-import consultas
+import arbol.consultas as consultas
 
 class Enlistador_seleccionador_personajes:
     def __init__(self):

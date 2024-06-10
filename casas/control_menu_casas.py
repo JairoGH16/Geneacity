@@ -1,6 +1,6 @@
 import pygame
 from casas.interfaz_menu_casas import Dibujador_personajes_casas,Dibujador_personaje_interactuando,Dibujar_avisos_casas
-from consultas import Consulta_persona_por_id,Crear_habitante
+from arbol.consultas import Consulta_persona_por_id,Crear_habitante
 from interfaz_en_juego.botones.botones_menu_pausa import Boton_volver
 from casas.agregar_personas_casa_arbol import Insertador_casas_arbol
 import time
