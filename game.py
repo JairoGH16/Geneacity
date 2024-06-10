@@ -40,6 +40,7 @@ class Game:
             self.personaje=self.controlador_menu_personaje.menu_seleccion_personaje()
             self.vivo=(consultas.Consulta_persona_por_id.consultar_persona(self.personaje["id"]))["alive"]
             print(self.personaje)
+            consultas.Seleccionar_habitante.seleccion_habitante(self.personaje["id"])
             self.nodo_raiz_arbol:Nodo_persona=self.inicializador_arbol.inicializar_arbol(int(self.personaje["id"]))
             self.controlador_menu_casas=Controlador_menu_casas(self.screen,self.nodo_raiz_arbol)
 
@@ -63,7 +64,7 @@ class Game:
                         self.personaje_x += 15
                 self.manejo_eventos()
                 self.acciones_temporales()
-                pygame.time.delay(100)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
+                pygame.time.delay(50)  # Pausa de 100 milisegundos en el bucle para reducir el uso de CPU.
                 self.screen.fill((0,0,0))
                 Fondo.colocar_fondo(self.fondo_cesped,self.screen)
                 if self.moviendose:

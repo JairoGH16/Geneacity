@@ -30,7 +30,7 @@ class Menu_principal:
             self.boton_salir.boton_constante()
             self.boton_info.boton_constante()
             pygame.display.flip()
-            pygame.time.delay(100)
+            pygame.time.delay(50)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

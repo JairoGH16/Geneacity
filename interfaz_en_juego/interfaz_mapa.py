@@ -63,7 +63,7 @@ class Interfaz_durante_mapa:
                  self.escritor.escribir(280,685,f"X: {coordenadas[0]}   Y: {coordenadas[1]}",42,(0,0,0))
             self.boton_volver.boton_constante()
             pygame.display.flip()
-            pygame.time.delay(100)
+            pygame.time.delay(50)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

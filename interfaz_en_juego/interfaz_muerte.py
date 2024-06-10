@@ -14,7 +14,7 @@ class Interfaz_durante_muerte:
             self.screen.blit(self.aviso_muerte,(0,0))
             self.escritor.escribir(72,91,nombre,40,(255,255,255))
             pygame.display.flip()
-            pygame.time.delay(100)
+            pygame.time.delay(50)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
