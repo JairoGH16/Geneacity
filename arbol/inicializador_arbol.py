@@ -1,5 +1,7 @@
 from arbol.nodos_arbol import Nodo_persona
-import consultas
+from arbol.arbol_genealogico import personas
+from arbol.arbol_genealogico import Arbol_genealogico_insertador
+import arbol.consultas as consultas
 
 class Inicializador_arbol:
     def inicializar_arbol(self,id_personaje:int):
@@ -46,5 +48,13 @@ class Inicializador_arbol:
         madre_seleccionado.hijos.append(personaje_seleccionado) #agrega el personaje seleccionado en la lista de hijos de su madre
         personaje_seleccionado.grado = 0
         personaje_seleccionado.relacion = "Yo"
+        personas.append(personaje_seleccionado)
+        personas.append(personaje_seleccionado.padre)
+        personas.append(personaje_seleccionado.madre)
+        personaje_seleccionado.padre.relacion = "Padre"
+        personaje_seleccionado.madre.relacion = "Madre"
+        arbol = Arbol_genealogico_insertador()
+        arbol.insertar_persona(personaje_seleccionado, personaje_seleccionado.padre)
+        arbol.insertar_persona(personaje_seleccionado, personaje_seleccionado.madre)
 
         return personaje_seleccionado

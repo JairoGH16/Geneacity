@@ -13,6 +13,7 @@ class Arbol_genealogico_insertador:
         self.ascendencia_ids = []
         self.descendencia_ids = []
         self.sobrinos_primos_ids = []
+        self.puntaje:int = 0
         self.actualizar_registro = "archivos_registrados.json"
 
     def insertar_persona(self, raiz, persona):
@@ -22,17 +23,20 @@ class Arbol_genealogico_insertador:
                 self.hermanos_tios_ids.append(persona.persona_id)
                 self.guardar_json(raiz)
                 persona.grado=grado
-                if persona.grado == 2:
-                    persona.relacion = "Hermano/a"
-                elif persona.grado == 3:
-                    persona.relacion = "Tio/a"
-                elif persona.grado == 4:
-                    persona.relacion = "Tio Abuelo"
-                elif persona.grado == 5:
-                    persona.relacion = "Tio Bisabuelo"
-                elif persona.grado == 5:
-                    persona.relacion = "Tio Tatarabuelo"
+                if persona.relacion == None:
+                    if persona.grado == 2:
+                        persona.relacion = "Hermano/a"
+                    elif persona.grado == 3:
+                        persona.relacion = "Tio/a"
+                    elif persona.grado == 4:
+                        persona.relacion = "Tio Abuelo"
+                    elif persona.grado == 5:
+                        persona.relacion = "Tio Bisabuelo"
+                    elif persona.grado == 5:
+                        persona.relacion = "Tio Tatarabuelo"
                 personas.append(persona)
+            self.puntaje+=(grado*5)
+            print(self.puntaje)
             return grado
 
         grado = self.__insertar_ascendencia(raiz, persona, 0)
@@ -52,6 +56,8 @@ class Arbol_genealogico_insertador:
                 elif persona.grado == 5:
                     persona.relacion = "Trastatarabuelo/a"
                 personas.append(persona)
+            self.puntaje+=(grado*5)
+            print(self.puntaje)
             return grado
 
         grado = self.__insertar_descendencia(raiz, persona, 0)
@@ -71,6 +77,8 @@ class Arbol_genealogico_insertador:
                 elif persona.grado == 5:
                     persona.relacion = "Trastataranieto"
                 personas.append(persona)
+            self.puntaje+=(grado*5)
+            print(self.puntaje)
             return grado
 
         grado = self.__insertar_sobrinos_primos(raiz, persona, 0)
@@ -120,6 +128,8 @@ class Arbol_genealogico_insertador:
                 elif persona.grado == 10 and persona.padre.relacion == "Tio cuarto":
                     persona.relacion = "Primo cuarto"
                 personas.append(persona)
+            self.puntaje+=(grado*5)
+            print(self.puntaje)
             return grado
 
         return None
@@ -200,15 +210,15 @@ class Arbol_genealogico_insertador:
             "descendencia": self.descendencia_ids,
             "sobrinos_primos": self.sobrinos_primos_ids
         }
-        nombre_archivo = f"arbol_genealogico{raiz.nombre}.json"
+        nombre_archivo = f"arbol_genealogico{raiz.persona_id}.json"
         with open(nombre_archivo, "w") as file:
             json.dump(data, file, indent=4)
         
         arbol_grafico()
 
-
     def cargar_json(self, raiz):
-        nombre_archivo = f"arbol_genealogico{raiz.nombre}.json"
+        personas.append(raiz)
+        nombre_archivo = f"arbol_genealogico{raiz.persona_id}.json"
         with open(nombre_archivo, "r") as file:
             data = json.load(file)
             self.hermanos_tios_ids = data.get("hermanos_tios", [])
@@ -216,8 +226,39 @@ class Arbol_genealogico_insertador:
             self.descendencia_ids = data.get("descendencia", [])
             self.sobrinos_primos_ids = data.get("sobrinos_primos", [])
 
+
     def cargar_arbol(self, raiz):
-        self.cargar_json(raiz)
+        info_persona = consultas.Consulta_persona_por_id.consultar_persona(raiz)
+        raiz_real = Nodo_persona(info_persona["id"],
+                                 info_persona["father"],
+                                 info_persona["mother"],
+                                 info_persona["name"],
+                                 info_persona["gender"],
+                                 info_persona["age"],
+                                 info_persona["marital_status"])
+        
+        info_persona = consultas.Consulta_persona_por_id.consultar_persona(raiz_real.padre_id)
+        padre_real = Nodo_persona(info_persona["id"],
+                                 info_persona["father"],
+                                 info_persona["mother"],
+                                 info_persona["name"],
+                                 info_persona["gender"],
+                                 info_persona["age"],
+                                 info_persona["marital_status"])
+        
+        info_persona = consultas.Consulta_persona_por_id.consultar_persona(raiz_real.madre_id)
+        madre_real = Nodo_persona(info_persona["id"],
+                                 info_persona["father"],
+                                 info_persona["mother"],
+                                 info_persona["name"],
+                                 info_persona["gender"],
+                                 info_persona["age"],
+                                 info_persona["marital_status"])
+        
+        self.insertar_persona(raiz_real, padre_real)
+        self.insertar_persona(raiz_real, madre_real)
+
+        self.cargar_json(raiz_real)
         for ascendencia_id in self.ascendencia_ids:
             info_actual = consultas.Consulta_persona_por_id.consultar_persona(ascendencia_id)
             ascendencia = Nodo_persona(info_actual["id"],
@@ -227,7 +268,8 @@ class Arbol_genealogico_insertador:
                                  info_actual["gender"],
                                  info_actual["age"],
                                  info_actual["marital_status"])
-            self.insertar_persona(raiz, ascendencia)
+            self.insertar_persona(raiz_real, ascendencia)
+            personas.append(ascendencia)
         for descendencia_id in self.descendencia_ids:
             info_actual = consultas.Consulta_persona_por_id.consultar_persona(descendencia_id)
             descendencia = Nodo_persona(info_actual["id"],
@@ -237,7 +279,8 @@ class Arbol_genealogico_insertador:
                                         info_actual["gender"],
                                         info_actual["age"],
                                         info_actual["marital_status"])
-            self.insertar_persona(raiz, descendencia)
+            self.insertar_persona(raiz_real, descendencia)
+            personas.append(descendencia)
         for hermanos_tios_id in self.hermanos_tios_ids:
             info_actual = consultas.Consulta_persona_por_id.consultar_persona(hermanos_tios_id)
             hermanos_tios = Nodo_persona(info_actual["id"],
@@ -247,7 +290,8 @@ class Arbol_genealogico_insertador:
                                          info_actual["gender"],
                                          info_actual["age"],
                                          info_actual["marital_status"])
-            self.insertar_persona(raiz, hermanos_tios)
+            self.insertar_persona(raiz_real, hermanos_tios)
+            personas.append(hermanos_tios)
         for sobrinos_primos_id in self.sobrinos_primos_ids:
             info_actual = consultas.Consulta_persona_por_id.consultar_persona(sobrinos_primos_id)
             sobrinos_primos = Nodo_persona(info_actual["id"],
@@ -257,8 +301,11 @@ class Arbol_genealogico_insertador:
                                            info_actual["gender"],
                                            info_actual["age"],
                                            info_actual["marital_status"])
-            self.insertar_persona(raiz, sobrinos_primos)
-            pass
+            self.insertar_persona(raiz_real, sobrinos_primos)
+            personas.append(sobrinos_primos)
+        
+        arbol_grafico()
+        pass
     
     def actualizar_registro(self, nombre_archivo):
         try:
@@ -326,3 +373,6 @@ def arbol_grafico():
     nx.draw(grafico_arbol, pos, labels=labels, with_labels=True, node_size=5000, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
     plt.title("Árbol Genealógico")
     plt.show()
+
+arbol = Arbol_genealogico_insertador()
+arbol.cargar_arbol(5118)

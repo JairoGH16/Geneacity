@@ -1,5 +1,5 @@
 import pygame
-from consultas import Consulta_persona_por_id as consulta_personaje
+from arbol.consultas import Consulta_persona_por_id as consulta_personaje
 
 class Administrador_personajes:
     def __init__(self,screen,edad,genero):    

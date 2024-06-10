@@ -1,6 +1,6 @@
 import pygame
 import time
-import consultas
+import arbol.consultas as consultas
 from casas.cargador_casas import Cargador_casas
 from personajes.personaje import Administrador_personajes
 from imagenes.fondo import Fondo

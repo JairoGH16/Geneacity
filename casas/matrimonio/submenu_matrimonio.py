@@ -1,5 +1,5 @@
 import pygame
-from consultas import Consulta_persona_por_id
+from arbol.consultas import Consulta_persona_por_id
 from escritor_texto import Escritor
 from casas.matrimonio.submapa_boda import Submapa_boda
 

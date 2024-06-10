@@ -2,7 +2,7 @@ import pygame
 from interfaz_en_juego.botones.botones_menu_pausa import Boton_volver
 from interfaz_en_juego.botones.botones_casas_mapa import Botones_casas_mapa
 from escritor_texto import Escritor
-from consultas import Casar_habitantes
+from arbol.consultas import Casar_habitantes
 
 from interfaz_en_juego.interfaz_mapa import Interfaz_durante_mapa
 
