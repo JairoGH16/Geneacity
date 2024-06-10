@@ -44,5 +44,7 @@ class Inicializador_arbol:
         personaje_seleccionado.madre=madre_seleccionado
         padre_seleccionado.hijos.append(personaje_seleccionado) #agrega el personaje seleccionado en la lista de hijos de su padre
         madre_seleccionado.hijos.append(personaje_seleccionado) #agrega el personaje seleccionado en la lista de hijos de su madre
+        personaje_seleccionado.grado = 0
+        personaje_seleccionado.relacion = "Yo"
 
         return personaje_seleccionado
